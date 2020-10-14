@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>milanator</title>
+  
+  <!-- Scripts de inicialización -->
+  <script>
+  // Si compilamos la versión sin comprimir, esto pasa a valer falso y
+    // en lugar de agregar los scripts _compressed, se agregan los _uncompressed.
+    const version_comprimida = false;
+  </script>
+  <script src="src/mila.js"></script>
+  <script src="src/canvas.js"></script>
+  <script src="src/interprete.js"></script>
+  
+  <!-- Intérprete -->
+  <script src="src/acorn_interpreter.js"></script>
+
+  <!-- Hoja de estilos -->
+  <link rel="stylesheet" href="src/mila.css" media="screen,projection">
+</head>
+
+<body>
+  <!-- Barra superior de navegación (onda menú) -->
+  <div id="navegacion">
+    <button id="botonEjecutar" onclick="Mila.ejecutar();">Ejecutar</button>
+    <button id="botonDetener" onclick="Mila.detener();">Detener</button>
+    <button id="botonDebug" onclick="Mila.debug();">Debug</button>
+  </div>
+  
+  <table><tr><td>
+    <!-- Canvas -->
+    <canvas id="canvas"></canvas>
+  </td><td>
+    <!-- Area para Blockly -->
+    <div id="blockly"></div>
+  </td></tr></table>
+</body>
+
+</html>

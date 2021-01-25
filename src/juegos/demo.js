@@ -103,7 +103,9 @@ Juego.mover = function(direccion) {
       Canvas.actualizar();
     }
   };
-  robot.intervalo = setInterval(f,25);
+  clearInterval(robot.intervalo);
+  let intervalo = setInterval(f,25);
+  robot.intervalo = intervalo;
 };
 
 // Antes de terminar de cargar la página, llamo a esta función

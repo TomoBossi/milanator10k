@@ -38,5 +38,22 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "text_blocks",
     "previousStatement":true,
     "nextStatement":true
+  },
+  {
+    "type": "robot_def",
+    "message0": "%{BKY_ROBOT_DEF} %1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "ROL",
+        "options": Mila.roles
+      }
+    ],
+    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "args1": [{
+      "type": "input_statement",
+      "name": "CUERPO"
+    }],
+    "style": "procedure_blocks",
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)

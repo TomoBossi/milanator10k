@@ -178,8 +178,14 @@ Mila.agregarImagenFuente = function(ruta, idArg) {
   document.write(`<img src="src/img/${ruta}" id="${id}" hidden></img>\n`);
 };
 
+// Define los roles del juego seleccionado.
+Mila.roles = function() {
+  return Juego.roles();
+}
+
 // Antes de terminar de cargar la página, llamo a esta función
 Mila.preCarga();
+
 
 // Cuando se termina de cargar la página, llamo a inicializar
 window.addEventListener('load', Mila.inicializar);

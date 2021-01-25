@@ -10,7 +10,7 @@
 Mila.generador = Blockly.JavaScript;
 
 // Prefijo de sentencia para iluminar los bloques cuando se ejecutan
-Mila.generador.STATEMENT_PREFIX = 'iluminar(%1);';
+Mila.generador.STATEMENT_PREFIX = 'iluminar(%1);\n';
 
 // Palabras reservadas (no pueden ser nombres de funciones ni variables)
 Mila.generador.addReservedWords('iluminar');
@@ -31,4 +31,13 @@ Mila.generador.arriba = function(bloque){
 };
 Mila.generador.abajo = function(bloque){
   return "abajo();\n";
+};
+Mila.generador.robot_def = function(bloque){
+  let branch = Mila.generador.statementToCode(bloque, 'CUERPO');
+  let rol = bloque.getFieldValue('ROL');
+  let codigo = 'function ' + rol + '() {\n' +
+       branch + '}';
+  Mila.generador.definitions_['%' + rol] = codigo;
+
+  return null;
 };

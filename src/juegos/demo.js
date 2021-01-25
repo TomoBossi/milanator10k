@@ -108,5 +108,12 @@ Juego.mover = function(direccion) {
   robot.intervalo = intervalo;
 };
 
+Juego.roles = function(){
+  return [
+  [Blockly.Msg.ARQUERO, "ARQUERO"],
+  [Blockly.Msg.DELANTERO, "DELANTERO"]
+];
+}
+
 // Antes de terminar de cargar la página, llamo a esta función
 Juego.preCarga();

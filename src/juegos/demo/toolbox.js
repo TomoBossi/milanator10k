@@ -9,4 +9,5 @@ Juego.toolbox =
     <block type="izquierda"></block>\
     <block type="arriba"></block>\
     <block type="abajo"></block>\
+    <block type="robot_def"></block>\
   </xml>';

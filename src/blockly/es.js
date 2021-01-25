@@ -16,3 +16,9 @@ Blockly.Msg.IZQUIERDA = 'izquierda';
 Blockly.Msg.ARRIBA = 'arriba';
 /// Título del bloque para mover un robot hacia abajo
 Blockly.Msg.ABAJO = 'abajo';
+/// Título del bloque para definir un robot
+Blockly.Msg.ROBOT_DEF = 'robot';
+/// Título del bloque para definir un robot arquero
+Blockly.Msg.ARQUERO = 'arquero'
+/// Título del bloque para definir un robot delantero
+Blockly.Msg.DELANTERO = 'delantero'

@@ -41,3 +41,35 @@ Mila.generador.robot_def = function(bloque){
 
   return null;
 };
+
+// Reemplazo el generador de la repetición simple
+  // Es idéntico al de JavaScript pero comenté la optimización
+  // que definía en otra sentencia la cantidad de repeticiones para que
+  // los bloques interiores se iluminen en cada iteración.
+Mila.generador['controls_repeat_ext'] = function(block) {
+  // Repeat n times.
+  if (block.getField('TIMES')) {
+    // Internal number.
+    var repeats = String(Number(block.getFieldValue('TIMES')));
+  } else {
+    // External number.
+    var repeats = Blockly.JavaScript.valueToCode(block, 'TIMES',
+        Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
+  }
+  var branch = Blockly.JavaScript.statementToCode(block, 'DO');
+  branch = Blockly.JavaScript.addLoopTrap(branch, block);
+  var code = '';
+  var loopVar = Blockly.JavaScript.variableDB_.getDistinctName(
+      'count', Blockly.VARIABLE_CATEGORY_NAME);
+  var endVar = repeats;
+  /*if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
+    endVar = Blockly.JavaScript.variableDB_.getDistinctName(
+        'repeat_end', Blockly.VARIABLE_CATEGORY_NAME);
+    code += 'var ' + endVar + ' = ' + repeats + ';\n';
+  }*/
+  code += 'for (var ' + loopVar + ' = 0; ' +
+      loopVar + ' < ' + endVar + '; ' +
+      loopVar + '++) {\n' +
+      branch + '}\n';
+  return code;
+};

@@ -44,30 +44,32 @@ Interprete.inicializar = function() {
 
 // Crea todos los intérpretes necesarios a partir del código generado por Blockly
 Interprete.compilar = function(codigo) {
-  Juego.robots[0].interprete = Interprete.nuevo(codigo);
+  for (robot of Juego.robots) {
+    robot.interprete = Interprete.nuevo(robot, codigo);
+  }
 };
 
 // Crea un nuevo intérprete a partir de un código personalizado
-Interprete.nuevo = function(codigo) {
+Interprete.nuevo = function(robot, codigo) {
   const initApi = function (interprete, global) {
     var wrapperDerecha = function() {
-      Interprete.retraso = Juego.tiemposBloque.derecha;
-      Juego.mover(DERECHA);
+      robot.interprete.retraso = Juego.tiemposBloque.derecha;
+      Juego.mover(robot, DERECHA);
       return;
     };
     var wrapperIzquierda = function() {
-      Interprete.retraso = Juego.tiemposBloque.izquierda;
-      Juego.mover(IZQUIERDA);
+      robot.interprete.retraso = Juego.tiemposBloque.izquierda;
+      Juego.mover(robot, IZQUIERDA);
       return;
     };
     var wrapperAbajo = function() {
-      Interprete.retraso = Juego.tiemposBloque.abajo;
-      Juego.mover(ABAJO);
+      robot.interprete.retraso = Juego.tiemposBloque.abajo;
+      Juego.mover(robot, ABAJO);
       return;
     };
     var wrapperArriba = function() {
-      Interprete.retraso = Juego.tiemposBloque.arriba;
-      Juego.mover(ARRIBA);
+      robot.interprete.retraso = Juego.tiemposBloque.arriba;
+      Juego.mover(robot, ARRIBA);
       return;
     };
     interprete.setProperty(global, 'derecha',
@@ -81,7 +83,27 @@ Interprete.nuevo = function(codigo) {
     interprete.setProperty(global, 'iluminar',
         interprete.createNativeFunction(Interprete.iluminar));
   };
-  return new Interpreter(codigo, initApi);
+  return {
+    interprete: new Interpreter(`${codigo}\n${robot.rol}();`, initApi),
+    // Ejecuta el código de un bloque
+      // Mientras siga en el mismo bloque ejecuto recursivamente
+    paso: function() {
+      if (this.interprete.step()) {       // Devuelve si quedan instrucciones por ejecutar
+        if (robot.interprete.retraso) {   // Cambio de bloque
+          let retraso = this.retraso;
+          delete this.retraso;
+          // Si estoy ejecutando programo próximo paso
+          if (Interprete.estado == EJECUTANDO) {
+            // this.proximoPaso = setTimeout(this.paso, retraso);
+          }
+        } else {                          // Sigo en el mismo bloque
+          this.paso();
+        }
+      } else {                            // Finalizó la ejecución
+        Interprete.iluminar(null);
+      }
+    }
+  };
 };
 
 // Comienza a ejercutar el intérprete
@@ -103,23 +125,10 @@ Interprete.debug = function(codigo) {
   Interprete.paso();
 };
 
-// Ejecuta el código de un bloque
-  // Mientras siga en el mismo bloque ejecuto recursivamente
+// Ejecuta un paso de cada intérprete
 Interprete.paso = function() {
-  if (Juego.robots[0].interprete.step()) {
-    if (Interprete.retraso) {                         // Cambio de bloque
-      let retraso = Interprete.retraso;
-      Interprete.retraso = null;
-      // Si estoy ejecutando programo próximo paso
-      if (Interprete.estado == EJECUTANDO) {
-        Interprete.proximoPaso =
-          setTimeout(Interprete.paso, retraso);
-      }
-    } else {                                          // Sigo en el mismo bloque
-      Interprete.paso();
-    }
-  } else {                                            // Finalizó la ejecución
-    Interprete.iluminar(null);
+  for (robot of Juego.robots) {
+    robot.interprete.paso();
   }
 };
 

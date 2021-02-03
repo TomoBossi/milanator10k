@@ -48,8 +48,8 @@ Juego.inicializar = function() {
 Juego.reiniciar = function() {
   Juego.detener();
   Juego.robots = [
-    {imagen:'robot', x:50, y:50, rot:180},
-    {imagen:'robot', x:250, y:250, rot:0}
+    {imagen:'robot', x:50, y:50, rot:180, rol:"DELANTERO"},
+    {imagen:'robot', x:250, y:250, rot:0, rol:"ARQUERO"}
   ];
   Juego.obstaculos = [
     {imagen:'caja', x:150, y:50, rot:0},
@@ -72,8 +72,7 @@ Juego.detener = function() {
 };
 
 // Ordena el movimiento de un robot en el mapa
-Juego.mover = function(direccion) {
-  const robot = Juego.robots[0];
+Juego.mover = function(robot, direccion) {
 
   var k=10;
   robot.veces = 0;

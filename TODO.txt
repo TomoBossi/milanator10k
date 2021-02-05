@@ -29,11 +29,18 @@
 
 Pendientes menores (son sólo copypaste de AelE):
 * (a) Recuperar la sesión anterior al recargar la página (para debuggear más rápido).
+  -> src/blockly.js : 26-29 + 30-36
 * (b) Guardar y cargar archivos.
+  -> src/blockly.js : generarXml y cargarDesdeXml
+  -> src/blockly.js : exportar e importar
 * (c) Iniciar con un bloque "Main" que no se pueda duplicar ni eliminar.
+  -> src/blockly.js : crearBloqueInicial
+  -> Ver lo de recordUndo y agrupar.
 * (d) Agregar un warning si un bloque está suelto y no debería estarlo.
   -> ¿Y que no se pueda ejecutar si hay advertencias en los bloques?
-* (e) Agregar los bloques de procedimientos al workspace (OJO: ver el registerToolboxCategoryCallback)
+* (e) Agregar los bloques de procedimientos al workspace
+  -> src/juegos/demo/toolbox.js
+  -> ver el registerToolboxCategoryCallback
 
 Otros pendientes:
 * (5) Hacer el bloque "Main" para definir el comportamiento de cada rol.

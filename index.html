@@ -25,10 +25,16 @@
 
 <body>
   <!-- Barra superior de navegación (onda menú) -->
-  <div id="navegacion">
+  <div id="navegacion-izquierda" style="float:left;">
     <button id="botonEjecutar" onclick="Mila.ejecutar();">Ejecutar</button>
     <button id="botonDetener" onclick="Mila.detener();">Detener</button>
     <button id="botonDebug" onclick="Mila.debug();">Debug</button>
+  </div>
+
+  <div id="navegacion-derecha" style="float:right;">
+    <button id="botonNuevo" onclick="Mila.Blockly.nuevo(Mila.workspace);">Nuevo</button>
+    <button id="botonGuardar" onclick="Mila.Blockly.exportar(Mila.workspace, 'mila');">Guardar</button>
+    <button id="botonCargar" onclick="Mila.Blockly.importar(Mila.workspace);">Cargar</button>
   </div>
 
   <table><tr><td>

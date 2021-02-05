@@ -11,6 +11,10 @@
     generarXml              Genera el xml de un workspace en formato string
     cargarDesdeXml          Crea los bloques en un workspace a partir de un xml en formato string
 
+    nuevo                   Quita todos los bloques para empezar un proyecto nuevo
+    exportar                Exporta el workspace a un archivo
+    importar                Importa el workspace desde un archivo
+
 **/
 
 Mila.Blockly = {};
@@ -47,4 +51,45 @@ Mila.Blockly.generarXml = function(workspace) {
 // Crea los bloques en un workspace a partir de un xml en formato string
 Mila.Blockly.cargarDesdeXml = function(workspace, xml) {
   Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+};
+
+// Quita todos los bloques para empezar un proyecto nuevo
+Mila.Blockly.nuevo = function(workspace) {
+  workspace.clear();
+  // Crear bloque inicial
+};
+
+// Exporta el workspace a un archivo
+Mila.Blockly.exportar = function(workspace, nombre) {
+  let xml = Mila.Blockly.generarXml(workspace);
+  let e = document.createElement('a');
+  e.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
+  e.setAttribute('download', `${nombre}.xml`);
+  e.style.display = 'none';
+  document.body.appendChild(e);
+  e.click();
+  document.body.removeChild(e);
+};
+
+// Importa el workspace desde un archivo
+Mila.Blockly.importar = function(workspace) {
+  let e = document.createElement('input');
+  e.type = 'file';
+  let div = document.createElement('div');
+  div.style.display = 'none';
+  div.appendChild(e);
+  document.body.appendChild(div);
+  e.addEventListener('change', function(x) {
+    let archivo = x.target.files[0];
+    if (archivo) {
+      let reader = new FileReader();
+      reader.onload = function() {
+        workspace.clear();
+        Mila.Blockly.cargarDesdeXml(workspace, reader.result);
+        document.body.removeChild(div);
+      }
+      reader.readAsText(archivo);
+    }
+  }, false);
+  e.click();
 };

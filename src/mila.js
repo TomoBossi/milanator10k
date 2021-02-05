@@ -16,10 +16,9 @@
   FUNCIONES
     precarga                  Inicializa todo lo necesario antes de que se termine de cargar la página
       agregarFuentesBlockly   Importa todos los archivos necesarios de Blockly
-      cargarIdioma            Determina el idioma actual y lo guarda en Mila.idioma}
+      cargarIdioma            Determina el idioma actual y lo guarda en Mila.idioma
       cargarJuego             Determina el juago actual y lo guarda en Mila.juego
     inicializar               Inicializa todo lo necesario una vez que se termina de cargar la página
-      inyectarBlockly         Inyecta la interfaz Blockly en la div con id "blockly" y guarda el resultado en Mila.workspace
       registrarEventos        Registra handlers para todos los eventos
     redimensionar             Esta función se ejecuta cada vez que cambia el tamaño de la ventana del navegador
 
@@ -86,25 +85,12 @@ Mila.cargarJuego = function() {
 // Inicializa todo lo necesario una vez que se termina de cargar la página
 Mila.inicializar = function() {
   Mila.div = document.getElementById('blockly');
-  Canvas.inicializar();     // Inicializar el canvas
-  Juego.inicializar();      // Inicializar el juego
-  Mila.inyectarBlockly();   // Inyectar la interfaz de Blockly
-  Mila.registrarEventos();  // Registrar handlers para eventos
-  Interprete.inicializar(); // Inicializar el intérprete
-  Mila.redimensionar();     // Llamo a esta función para que ajuste el tamaño al iniciar
-  /* --> */
-  Blockly.Xml.domToWorkspace(
-    Blockly.Xml.textToDom('<xml><block type="controls_repeat_ext" x="9" y="22"><value name="TIMES"><block type="math_number"><field name="NUM">10</field></block></value><statement name="DO"><block type="controls_if"><value name="IF0"><block type="logic_boolean"><field name="BOOL">TRUE</field></block></value><statement name="DO0"><block type="abajo"></block></statement><next><block type="controls_repeat_ext"><value name="TIMES"><block type="math_number"><field name="NUM">3</field></block></value><statement name="DO"><block type="derecha"></block></statement><next><block type="controls_repeat_ext"><value name="TIMES"><block type="math_number"><field name="NUM">3</field></block></value><statement name="DO"><block type="izquierda"></block></statement></block></next></block></next></block></statement></block></xml>'),
-    Mila.workspace);
-  /* <-- */
-};
-
-// Inyecta la interfaz Blockly en la div con id "blockly" y guarda el resultado en Mila.workspace
-Mila.inyectarBlockly = function() {
-  // Toma como segundo argumento un objeto de configuración
-  Mila.workspace = Blockly.inject('blockly', {
-    toolbox: Juego.toolbox                      // Set de bloques del juego actual
-  });
+  Canvas.inicializar();          // Inicializar el canvas
+  Juego.inicializar();           // Inicializar el juego
+  Mila.Blockly.inicializar();    // Inyectar la interfaz de Blockly
+  Mila.registrarEventos();       // Registrar handlers para eventos
+  Interprete.inicializar();      // Inicializar el intérprete
+  Mila.redimensionar();          // Llamo a esta función para que ajuste el tamaño al iniciar
 };
 
 // Registra handlers para todos los eventos

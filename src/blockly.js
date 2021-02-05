@@ -7,6 +7,7 @@
   FUNCIONES
     inicializar             Inicializa el entorno Blockly
       inyectarBlockly       Inyecta la interfaz Blockly en la div con id "blockly" y guarda el resultado en Mila.workspace
+      crearBloqueInicial    Crea el bloque principal
 
     generarXml              Genera el xml de un workspace en formato string
     cargarDesdeXml          Crea los bloques en un workspace a partir de un xml en formato string
@@ -31,7 +32,7 @@ Mila.Blockly.inicializar = function() {
     Mila.Blockly.cargarDesdeXml(Mila.workspace, sessionStorage.xml);
   // Si no, creo un workspace vacío
   } else {
-    // Crear bloque inicial
+    Mila.Blockly.crearBloqueInicial(Mila.workspace);
   }
 };
 
@@ -41,6 +42,15 @@ Mila.Blockly.inyectarBlockly = function() {
   Mila.workspace = Blockly.inject('blockly', {
     toolbox: Juego.toolbox                      // Set de bloques del juego actual
   });
+};
+
+// Crea el bloque principal
+Mila.Blockly.crearBloqueInicial = function(workspace) {
+  let bloque = workspace.newBlock("robot_def");
+  bloque.setDeletable(false);
+  bloque.initSvg();
+  bloque.render();
+  bloque.moveBy(50,50);
 };
 
 // Genera el xml de un workspace en formato string
@@ -56,7 +66,7 @@ Mila.Blockly.cargarDesdeXml = function(workspace, xml) {
 // Quita todos los bloques para empezar un proyecto nuevo
 Mila.Blockly.nuevo = function(workspace) {
   workspace.clear();
-  // Crear bloque inicial
+  Mila.Blockly.crearBloqueInicial(workspace);
 };
 
 // Exporta el workspace a un archivo

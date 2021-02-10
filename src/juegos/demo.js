@@ -22,14 +22,14 @@ const Juego = {};
 
 // Duración de cada bloque
 Juego.tiemposBloque = {
-  derecha:200,
-  izquierda:200,
-  arriba:200,
-  abajo:200,
-  controls_repeat_ext:100,
-  controls_if:100,
-  math_number:100,
-  logic_boolean:100
+  derecha:4,
+  izquierda:4,
+  arriba:4,
+  abajo:4,
+  controls_repeat_ext:2,
+  controls_if:2,
+  math_number:2,
+  logic_boolean:2
 };
 
 // Inicializa todo lo necesario antes de que se termine de cargar la página
@@ -48,8 +48,8 @@ Juego.inicializar = function() {
 Juego.reiniciar = function() {
   Juego.detener();
   Juego.robots = [
-    {imagen:'robot', x:50, y:50, rot:180, rol:"DELANTERO"},
-    {imagen:'robot', x:250, y:250, rot:0, rol:"ARQUERO"}
+    {imagen:'robot', x:50, y:50, rot:180, rol:"DELANTERO", velocidad: 10},
+    {imagen:'robot', x:250, y:50, rot:0, rol:"ARQUERO", velocidad: 5}
   ];
   Juego.obstaculos = [
     {imagen:'caja', x:150, y:50, rot:0},
@@ -73,38 +73,8 @@ Juego.detener = function() {
 
 // Ordena el movimiento de un robot en el mapa
 Juego.mover = function(robot, direccion) {
-
-  var k=10;
-  robot.veces = 0;
-  const f = function() {
-    robot.veces ++;
-    if (robot.veces==8) {
-      clearInterval(robot.intervalo);
-    } else {
-      switch (direccion) {
-        case DERECHA:
-          robot.x = robot.x+k;
-          robot.rot = 90;
-          break;
-        case IZQUIERDA:
-          robot.x = robot.x-k;
-          robot.rot = 270;
-          break;
-        case ABAJO:
-          robot.y = robot.y+k;
-          robot.rot = 180;
-          break;
-        case ARRIBA:
-          robot.y = robot.y-k;
-          robot.rot = 0;
-          break;
-      }
-      Canvas.actualizar();
-    }
-  };
-  clearInterval(robot.intervalo);
-  let intervalo = setInterval(f,25);
-  robot.intervalo = intervalo;
+  robot.estado = direccion;
+  
 };
 
 Juego.roles = function(){
@@ -112,6 +82,30 @@ Juego.roles = function(){
   [Blockly.Msg.ARQUERO, "ARQUERO"],
   [Blockly.Msg.DELANTERO, "DELANTERO"]
 ];
+}
+
+Juego.paso = function(){
+  for(robot of Juego.robots){
+    let k = robot.velocidad;
+    switch (robot.estado) {
+      case DERECHA:
+        robot.x = robot.x+k;
+        robot.rot = 90;
+        break;
+      case IZQUIERDA:
+        robot.x = robot.x-k;
+        robot.rot = 270;
+        break;
+      case ABAJO:
+        robot.y = robot.y+k;
+        robot.rot = 180;
+        break;
+      case ARRIBA:
+        robot.y = robot.y-k;
+        robot.rot = 0;
+        break;
+    }
+  }
 }
 
 // Antes de terminar de cargar la página, llamo a esta función

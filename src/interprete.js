@@ -32,10 +32,13 @@ const EJECUTANDO = 1;
 const DEBUGGEANDO = 2;
 
 // Posibles direcciones para llamar a Juego.mover
-const DERECHA = 0;
-const IZQUIERDA = 1;
-const ARRIBA = 2;
-const ABAJO = 3;
+const FIN = -1;
+const QUIETO = 0;
+const DERECHA = 1;
+const IZQUIERDA = 2;
+const ARRIBA = 3;
+const ABAJO = 4;
+
 
 // Inicializa todo lo necesario una vez que se termina de cargar la página
 Interprete.inicializar = function() {
@@ -88,19 +91,21 @@ Interprete.nuevo = function(robot, codigo) {
     // Ejecuta el código de un bloque
       // Mientras siga en el mismo bloque ejecuto recursivamente
     paso: function() {
-      if (this.interprete.step()) {       // Devuelve si quedan instrucciones por ejecutar
-        if (robot.interprete.retraso) {   // Cambio de bloque
-          let retraso = this.retraso;
-          delete this.retraso;
-          // Si estoy ejecutando programo próximo paso
-          if (Interprete.estado == EJECUTANDO) {
-            // this.proximoPaso = setTimeout(this.paso, retraso);
+
+
+
+      if(robot.interprete.retraso && robot.interprete.retraso > 0){
+        // Estoy ejecutando algo durante x pulsos y mientras no hago nada
+        robot.interprete.retraso--;
+      } else {
+        // Tengo que ejecutar this.interprete hasta que cambie de bloque
+        while(!(robot.interprete.retraso && robot.interprete.retraso > 0)){
+          // Mientras no llegue al próximo bloque
+          if(!this.interprete.step()){
+            robot.estado = FIN;
+            break;
           }
-        } else {                          // Sigo en el mismo bloque
-          this.paso();
         }
-      } else {                            // Finalizó la ejecución
-        Interprete.iluminar(null);
       }
     }
   };
@@ -109,13 +114,13 @@ Interprete.nuevo = function(robot, codigo) {
 // Comienza a ejercutar el intérprete
 Interprete.ejecutar = function(codigo) {
   Interprete.estado = EJECUTANDO;
-  Interprete.proximoPaso = setTimeout(Interprete.paso, 100);
+  //Interprete.proximoPaso = setTimeout(Interprete.paso, 100);
 };
 
 // Detiene la ejecución del intérprete
 Interprete.detener = function() {
   Interprete.estado = DETENIDO;
-  clearTimeout(Interprete.proximoPaso);   // Si había un paso programado, lo cancelo
+  //clearTimeout(Interprete.proximoPaso);   // Si había un paso programado, lo cancelo
   Interprete.iluminar(null);              // Si quedaron bloques iluminados, los anulo
 };
 
@@ -128,7 +133,9 @@ Interprete.debug = function(codigo) {
 // Ejecuta un paso de cada intérprete
 Interprete.paso = function() {
   for (robot of Juego.robots) {
-    robot.interprete.paso();
+    if(robot.estado != FIN){
+        robot.interprete.paso();
+    }
   }
 };
 

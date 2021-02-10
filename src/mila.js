@@ -33,6 +33,7 @@
 **/
 
 const Mila = {};
+const INTERVALO_INICIAL = 25;
 
 // Posibles valores para los argumentos que vienen en la URL
   // El primero es el valor por defecto
@@ -91,6 +92,7 @@ Mila.inicializar = function() {
   Mila.registrarEventos();       // Registrar handlers para eventos
   Interprete.inicializar();      // Inicializar el intérprete
   Mila.redimensionar();          // Llamo a esta función para que ajuste el tamaño al iniciar
+  CLOCK.crear(INTERVALO_INICIAL);// Creo el clock
 };
 
 // Registra handlers para todos los eventos
@@ -113,6 +115,11 @@ Mila.ejecutar = function(){
   const codigo = Mila.generador.workspaceToCode(Mila.workspace);
   Interprete.compilar(codigo);
   Interprete.ejecutar();
+  CLOCK.iniciar(function(){
+    Interprete.paso();
+    Juego.paso();
+    Canvas.actualizar();
+  });
 }
 
 // Detiene la ejecución

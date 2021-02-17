@@ -27,13 +27,17 @@ Mila.Blockly.inicializar = function() {
   Mila.workspace.addChangeListener(function(evento) {
     sessionStorage.xml = Mila.Blockly.generarXml(Mila.workspace);
   });
-  // Me fijo si hay un workspace guardado
-  if (sessionStorage.xml) {
-    Mila.Blockly.cargarDesdeXml(Mila.workspace, sessionStorage.xml);
-  // Si no, creo un workspace vacío
-  } else {
-    Mila.Blockly.crearBloqueInicial(Mila.workspace);
-  }
+  setTimeout(function() {
+    Blockly.Events.recordUndo = false;
+    // Me fijo si hay un workspace guardado
+    if (sessionStorage.xml) {
+      Mila.Blockly.cargarDesdeXml(Mila.workspace, sessionStorage.xml);
+    // Si no, creo un workspace vacío
+    } else {
+      Mila.Blockly.crearBloqueInicial(Mila.workspace);
+    }
+    Blockly.Events.recordUndo = true;
+  }, 100); // Si lo hago ahora no funciona, así que espero un poco
 };
 
 // Inyecta la interfaz Blockly en la div con id "blockly" y guarda el resultado en Mila.workspace
@@ -65,8 +69,10 @@ Mila.Blockly.cargarDesdeXml = function(workspace, xml) {
 
 // Quita todos los bloques para empezar un proyecto nuevo
 Mila.Blockly.nuevo = function(workspace) {
-  workspace.clear();
-  Mila.Blockly.crearBloqueInicial(workspace);
+  Mila.Blockly.agrupar(function() {
+    workspace.clear();
+    Mila.Blockly.crearBloqueInicial(workspace);
+  });
 };
 
 // Exporta el workspace a un archivo
@@ -95,11 +101,26 @@ Mila.Blockly.importar = function(workspace) {
       let reader = new FileReader();
       reader.onload = function() {
         workspace.clear();
-        Mila.Blockly.cargarDesdeXml(workspace, reader.result);
-        document.body.removeChild(div);
+        Mila.Blockly.agrupar(function() {
+          Mila.Blockly.cargarDesdeXml(workspace, reader.result);
+          document.body.removeChild(div);
+        });
       }
       reader.readAsText(archivo);
     }
   }, false);
   e.click();
+};
+
+Mila.Blockly.agrupar = function(f) {
+  let group = Blockly.Events.getGroup();
+  if (!group) {
+    Blockly.Events.setGroup(true);
+  }
+
+  f();
+
+  if (!group) {
+    Blockly.Events.setGroup(false);
+  }
 };

@@ -28,7 +28,7 @@ Canvas.inicializar = function() {
   Canvas.div = document.getElementById('canvas');
   Canvas.contexto = Canvas.div.getContext("2d");
   Canvas.reiniciar();
-}
+};
 
 // Esta función se ejecuta cada vez que cambia el tamaño de la ventana del navegador
 //  (y una vez cuando se inicializa la página)

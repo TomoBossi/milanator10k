@@ -3,4 +3,4 @@
 	url = https://github.com/google/blockly
 [submodule "clock"]
 	path = clock
-	url = git@github.com:gpfernandezflorio/clock.git
+	url = https://github.com/gpfernandezflorio/clock

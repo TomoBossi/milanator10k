@@ -77,6 +77,9 @@ Mila.Blockly.nuevo = function(workspace) {
 
 // Exporta el workspace a un archivo
 Mila.Blockly.exportar = function(workspace, nombre) {
+  if (nombre === null) {
+    return;
+  }
   let xml = Mila.Blockly.generarXml(workspace);
   let e = document.createElement('a');
   e.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));

@@ -122,14 +122,18 @@ Mila.redimensionar = function() {
 
 // Inicia la ejecución
 Mila.ejecutar = function(){
-  Mila.detener();
+  if (document.getElementById('checkReiniciarAlEjectuar').checked) {
+    Mila.detener();
+  } else {
+    CLOCK.detener();
+    Interprete.detener();
+    Mila.reiniciarRobots();
+  }
   const codigo = Mila.generador.workspaceToCode(Mila.workspace);
   Interprete.compilar(codigo);
   Interprete.ejecutar();
   CLOCK.iniciar(function(){
-    Interprete.paso();
-    Juego.paso();
-    Canvas.actualizar();
+    Mila.paso();
   });
 }
 
@@ -144,12 +148,26 @@ Mila.detener = function() {
 
 // Inicia el debugger (o avanza un paso si ya está iniciado)
 Mila.debug = function(){
-  if (Interprete.estado != DEBUGGEANDO) {
+  if (Interprete.estado == DEBUGGEANDO) {
+    Mila.paso();
+  } else {
     Mila.detener();
     const codigo = Mila.generador.workspaceToCode(Mila.workspace);
     Interprete.compilar(codigo);
+    Interprete.debug();
   }
-  Interprete.debug();
+};
+
+Mila.paso = function() {
+  Interprete.paso();
+  Juego.paso();
+  Canvas.actualizar();
+};
+
+Mila.reiniciarRobots = function() {
+  for (let robot of Juego.robots) {
+    robot.estado = 0;
+  }
 };
 
 // Obtiene argumentos de la url (?key=valor)

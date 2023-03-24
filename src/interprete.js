@@ -99,17 +99,26 @@ Interprete.nuevo = function(robot, codigo) {
     // Ejecuta el código de un bloque
       // Mientras siga en el mismo bloque ejecuto recursivamente
     paso: function() {
-      if(robot.interprete.retraso && robot.interprete.retraso > 0){
-        // Estoy ejecutando algo durante x pulsos y mientras no hago nada
-        robot.interprete.retraso--;
-      } else {
+      if (Interprete.estado === DEBUGGEANDO) {
         // Tengo que ejecutar this.interprete hasta que cambie de bloque
-        while(!(robot.interprete.retraso && robot.interprete.retraso > 0)){
-          // Mientras no llegue al próximo bloque
-          if(!this.interprete.step()){
-            robot.estado = FIN;
-            break;
-          }
+        this.avanzarHastaProximoBloque();
+        robot.interprete.retraso = 0;
+      } else {
+        if(robot.interprete.retraso && robot.interprete.retraso > 0){
+          // Estoy ejecutando algo durante x pulsos y mientras no hago nada
+          robot.interprete.retraso--;
+        } else {
+          // Tengo que ejecutar this.interprete hasta que cambie de bloque
+          this.avanzarHastaProximoBloque();
+        }
+      }
+    },
+    avanzarHastaProximoBloque: function() {
+      while(!(robot.interprete.retraso && robot.interprete.retraso > 0)){
+        // Mientras no llegue al próximo bloque
+        if(!this.interprete.step()){
+          robot.estado = FIN;
+          break;
         }
       }
     }
@@ -132,14 +141,13 @@ Interprete.detener = function() {
 // Ejecuta un paso de debug
 Interprete.debug = function(codigo) {
   Interprete.estado = DEBUGGEANDO;
-  Interprete.paso();
 };
 
 // Ejecuta un paso de cada intérprete
 Interprete.paso = function() {
   for (robot of Juego.robots) {
     if(robot.estado != FIN){
-        robot.interprete.paso();
+      robot.interprete.paso();
     }
   }
 };
@@ -160,5 +168,6 @@ Interprete.iluminar = function(idBloque) {
 // Determina si el tipo corresponde a un bloque primitivo
   // En tal caso, el retraso lo va a asignar su función correspondiente y no el iluminar
 Interprete.bloquePrimitivo = function(tipo) {
-  return ['derecha','izquierda','arriba','abajo'].includes(tipo);
+  return ['derecha','izquierda','arriba','abajo'].includes(tipo) ||
+    (Juego.acciones || []).includes(tipo);
 }

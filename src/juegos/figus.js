@@ -21,8 +21,8 @@
 const Juego = {};
 
 Juego.tiemposBloque = {
+  controls_whileUntil:2,
   controls_repeat_ext:2,
-  controls_if:2,
   math_number:2,
   logic_boolean:2
 };
@@ -157,27 +157,6 @@ Juego.roles = function() {
 }
 
 Juego.paso = function() {
-  for(robot of Juego.robots){
-    let k = robot.velocidad;
-    switch (robot.estado) {
-      case DERECHA:
-        robot.x = robot.x+k;
-        robot.rot = 90;
-        break;
-      case IZQUIERDA:
-        robot.x = robot.x-k;
-        robot.rot = 270;
-        break;
-      case ABAJO:
-        robot.y = robot.y+k;
-        robot.rot = 180;
-        break;
-      case ARRIBA:
-        robot.y = robot.y-k;
-        robot.rot = 0;
-        break;
-    }
-  }
 }
 
 // Antes de terminar de cargar la página, llamo a esta función

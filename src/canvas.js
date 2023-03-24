@@ -33,7 +33,7 @@ Canvas.inicializar = function() {
 // Esta función se ejecuta cada vez que cambia el tamaño de la ventana del navegador
 //  (y una vez cuando se inicializa la página)
 Canvas.redimensionar = function() {
-  Canvas.div.height = window.innerHeight-35;
+  Canvas.div.height = window.innerHeight-40;
   Canvas.ancho = 400; //window.innerWidth/2-5;
   Canvas.div.width = Canvas.ancho;
   Canvas.actualizar();
@@ -47,8 +47,13 @@ Canvas.reiniciar = function() {
 // Refresca lo que muestra el canvas
 Canvas.actualizar = function() {
   Canvas.limpiar();
+  Canvas.objetos = Canvas.objetos.filter((x) => !('del' in x));
   for (objeto of Canvas.objetos) {
-    Canvas.imagen(objeto.imagen, objeto.x, objeto.y, objeto.rot);
+    if ('imagen' in objeto) {
+      Canvas.imagen(objeto.imagen, objeto.x, objeto.y, objeto.scale, objeto.rot);
+    } else if ('texto' in objeto) {
+      Canvas.texto(objeto.texto, objeto.x, objeto.y, objeto.scale, objeto.rot);
+    }
   }
 };
 
@@ -58,18 +63,28 @@ Canvas.limpiar = function() {
 };
 
 // Dibuja una imagen en el canvas
-Canvas.imagen = function(id, x, y, r=0) {
+Canvas.imagen = function(id, x, y, s=1, r=0) {
   Canvas.contexto.save();
   const img = document.getElementById(id);
-  Canvas.contexto.translate(x+img.width/2,y+img.height/2);
+  let w = img.width*s;
+  let h = img.height*s;
+  Canvas.contexto.translate(x+w/2,y+h/2);
   Canvas.contexto.rotate(r*Math.PI/180);
-  Canvas.contexto.translate(-x-img.width/2,-y-img.height/2);
-  Canvas.contexto.drawImage(img, x, y);
+  Canvas.contexto.translate(-x-w/2,-y-h/2);
+  Canvas.contexto.drawImage(img, x, y, w, h);
   Canvas.contexto.restore();
+};
+
+// Escribe texto en el canvas
+Canvas.texto = function(t, x, y, s=1, r=0) {
+  Canvas.contexto.font = `${20*s}px serif`;
+  Canvas.contexto.fillText(t, x, y);
 }
 
 // Agrega un objeto a dibujar en cada refresco de pantalla
-  // Debe tener los campos: imagen, x, y, rot
+  // Debe tener los campos: x, y
+  // Además debe tener alguno de los siguientes: imagen, texto
+  // Campos adicionales opcionales: scale, rot
 Canvas.nuevoObjeto = function(objeto) {
   Canvas.objetos.push(objeto);
 };

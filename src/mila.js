@@ -39,7 +39,7 @@ const INTERVALO_INICIAL = 25;
   // El primero es el valor por defecto
 Mila.argumentosValidos = {
   idioma:['es','en'],
-  juego:['demo']
+  juego:['demo','figus']
 }
 
 // Inicializa todo lo necesario antes de que se termine de cargar la página
@@ -93,6 +93,17 @@ Mila.inicializar = function() {
   Interprete.inicializar();      // Inicializar el intérprete
   Mila.redimensionar();          // Llamo a esta función para que ajuste el tamaño al iniciar
   CLOCK.crear(INTERVALO_INICIAL);// Creo el clock
+  SLIDER.nuevo({
+    placeholderId: 'sliderPlaceholder',
+    valorInicial: CLOCK.ESCALA,
+    maximoInicial: 2 * CLOCK.ESCALA,
+    maximoMaximo: INTERVALO_INICIAL * CLOCK.ESCALA,
+    mostrarValor: false,
+    paso: CLOCK.ESCALA,
+    funcion: function(valor) {
+      CLOCK.setearVelocidad(Math.floor(valor));
+    }
+  });
 };
 
 // Registra handlers para todos los eventos
@@ -104,7 +115,7 @@ Mila.registrarEventos = function () {
 //  (y una vez cuando se inicializa la página)
 Mila.redimensionar = function() {
   Canvas.redimensionar();
-  Mila.div.style.height = `${window.innerHeight-35}px`;
+  Mila.div.style.height = `${window.innerHeight-40}px`;
   Mila.div.style.width = `${window.innerWidth-Canvas.ancho-10}px`;
   Blockly.svgResize(Mila.workspace);
 };
@@ -124,6 +135,7 @@ Mila.ejecutar = function(){
 
 // Detiene la ejecución
 Mila.detener = function() {
+  CLOCK.detener();
   Interprete.detener();
   Canvas.reiniciar();   // Elimino todos los objetos del canvas
   Juego.reiniciar();    // Reinicio el juego
@@ -169,6 +181,14 @@ Mila.agregarImagenFuente = function(ruta, idArg) {
     id = idArg;
   }
   document.write(`<img src="src/img/${ruta}" id="${id}" hidden></img>\n`);
+};
+
+Mila.agregarImagenFuenteLocal = function(ruta, idArg) {
+  let id = ruta.split(".")[0];
+  if (idArg) {
+    id = idArg;
+  }
+  document.write(`<img src="src/juegos/${ruta}" id="${id}" hidden></img>\n`);
 };
 
 // Define los roles del juego seleccionado.

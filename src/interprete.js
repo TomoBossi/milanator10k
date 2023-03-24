@@ -55,6 +55,14 @@ Interprete.compilar = function(codigo) {
 // Crea un nuevo intérprete a partir de un código personalizado
 Interprete.nuevo = function(robot, codigo) {
   const initApi = function (interprete, global) {
+    for (let a of Juego.acciones || []) {
+      var wrapper = function() {
+        robot.interprete.retraso = Juego.tiemposBloque[a];
+        return Juego.mover(robot, a);
+      }
+      interprete.setProperty(global, a,
+          interprete.createNativeFunction(wrapper));
+    }
     var wrapperDerecha = function() {
       robot.interprete.retraso = Juego.tiemposBloque.derecha;
       Juego.mover(robot, DERECHA);
@@ -91,9 +99,6 @@ Interprete.nuevo = function(robot, codigo) {
     // Ejecuta el código de un bloque
       // Mientras siga en el mismo bloque ejecuto recursivamente
     paso: function() {
-
-
-
       if(robot.interprete.retraso && robot.interprete.retraso > 0){
         // Estoy ejecutando algo durante x pulsos y mientras no hago nada
         robot.interprete.retraso--;

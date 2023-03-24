@@ -22,6 +22,7 @@
 
   <!-- Submódulos -->
   <script src="clock/clock.js"></script>
+  <script src="clock/slider.js"></script>
 
   <!-- Hoja de estilos -->
   <link rel="stylesheet" href="src/mila.css" media="screen,projection">
@@ -33,6 +34,7 @@
     <button id="botonEjecutar" onclick="Mila.ejecutar();">Ejecutar</button>
     <button id="botonDetener" onclick="Mila.detener();">Detener</button>
     <button id="botonDebug" onclick="Mila.debug();">Debug</button>
+    Velocidad: <span id="sliderPlaceholder"></span>
   </div>
   <div id="navegacion-derecha" style="float:right;">
     <button id="botonNuevo" onclick="Mila.Blockly.nuevo(Mila.workspace);">Nuevo</button>

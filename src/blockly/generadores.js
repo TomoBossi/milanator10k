@@ -34,7 +34,7 @@ Mila.generador.abajo = function(bloque){
 };
 Mila.generador.robot_def = function(bloque){
   let branch = Mila.generador.statementToCode(bloque, 'CUERPO');
-  let rol = bloque.getFieldValue('ROL');
+  let rol = "AUTO" // bloque.getFieldValue('ROL');
   let codigo = 'function ' + rol + '() {\n' +
        branch + '}';
   Mila.generador.definitions_['%' + rol] = codigo;

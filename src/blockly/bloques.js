@@ -41,15 +41,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   },
   {
     "type": "robot_def",
-    "message0": "%{BKY_ROBOT_DEF} %1",
-    "args0": [
-      {
-        "type": "field_dropdown",
-        "name": "ROL",
-        "options": Mila.roles
-      }
-    ],
-    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "message0": "Programa",
+    "message1": "%1",
     "args1": [{
       "type": "input_statement",
       "name": "CUERPO"

@@ -80,6 +80,11 @@ Juego.mover = function(robot, direccion) {
   let i;
   switch (direccion) {
     case 'crearAlbum':
+      if (Juego.elementos.album.length > 0) {
+        alert("Ya creaste el álbum");
+        Mila.detener();
+        break;
+      }
       for (i=0; i<6; i++) {
         let img = {imagen:'vacia', x:10+65*i, y:250, rot:0, scale:.3};
         Juego.elementos.album.push(img);
@@ -88,14 +93,32 @@ Juego.mover = function(robot, direccion) {
       Canvas.nuevoObjeto({texto:"Álbum:", x:10, y:220});
       break;
     case 'faltaFiguEnÁlbum':
+      if (Juego.elementos.album.length == 0) {
+        alert("Todavía no creaste el álbum");
+        Mila.detener();
+        break;
+      }
       return Juego.elementos.album.some((x) => x.imagen === 'vacia');
       break;
     case 'comprarFigu':
+      if ('figuActual' in Juego.elementos) {
+        Juego.elementos.figuActual.del = true;
+      }
       i = Math.floor(Math.random()*6);
       Juego.elementos.figuActual = {imagen:`figu${i}`, x:120, y:110, scale:.3, i:i};
       Canvas.nuevoObjeto(Juego.elementos.figuActual);
       break;
     case 'pegarFigu':
+      if (!('figuActual' in Juego.elementos)) {
+        alert("No tenés ninguna figu para pegar");
+        Mila.detener();
+        break;
+      }
+      if (Juego.elementos.album.length == 0) {
+        alert("Todavía no creaste el álbum");
+        Mila.detener();
+        break;
+      }
       i = Juego.elementos.figuActual.i;
       Juego.elementos.figuActual.x = 10+65*i;
       Juego.elementos.figuActual.y = 250;
@@ -104,12 +127,22 @@ Juego.mover = function(robot, direccion) {
       delete Juego.elementos.figuActual;
       break;
     case 'crearContador':
+      if ('contador' in Juego.elementos) {
+        alert("Ya creaste el contador");
+        Mila.detener();
+        break;
+      }
       let c = {texto:0, x:150, y:50};
       Juego.elementos.contador = c;
       Canvas.nuevoObjeto(c);
       Canvas.nuevoObjeto({texto:"Contador:", x:10, y:50});
       break;
     case 'incrementarContador':
+      if (!('contador' in Juego.elementos)) {
+        alert("Todavía no creaste el contador");
+        Mila.detener();
+        break;
+      }
       Juego.elementos.contador.texto += 1;
       break;
     default:

@@ -118,6 +118,7 @@ Interprete.nuevo = function(robot, codigo) {
         // Mientras no llegue al próximo bloque
         if(!this.interprete.step()){
           robot.estado = FIN;
+          Interprete.finRobot();
           break;
         }
       }
@@ -149,6 +150,14 @@ Interprete.paso = function() {
     if(robot.estado != FIN){
       robot.interprete.paso();
     }
+  }
+};
+
+Interprete.finRobot = function() {
+  Interprete.iluminar(null);
+  if (Juego.robots.every((x) => x.estado === FIN)) {
+    CLOCK.detener();
+    Interprete.detener();
   }
 };
 

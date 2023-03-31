@@ -115,7 +115,7 @@ Mila.registrarEventos = function () {
 //  (y una vez cuando se inicializa la página)
 Mila.redimensionar = function() {
   Canvas.redimensionar();
-  Mila.div.style.height = `${window.innerHeight-40}px`;
+  Mila.div.style.height = `${window.innerHeight-50}px`;
   Mila.div.style.width = `${window.innerWidth-Canvas.ancho-10}px`;
   Blockly.svgResize(Mila.workspace);
 };

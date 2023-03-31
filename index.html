@@ -25,28 +25,32 @@
   <script src="clock/slider.js"></script>
 
   <!-- Hoja de estilos -->
+  <link rel="stylesheet" href="src/materialize/materialize.css" media="screen,projection">
+  <script src="materialize/materialize.js"></script>
   <link rel="stylesheet" href="src/mila.css" media="screen,projection">
 </head>
 
 <body>
   <!-- Barra superior de navegación (onda menú) -->
-  <div id="navegacion-izquierda" style="float:left;">
-    Reiniciar al ejecutar <input id="checkReiniciarAlEjectuar" type="checkbox">
-    <button id="botonEjecutar" onclick="Mila.ejecutar();">Ejecutar</button>
-    <button id="botonDetener" onclick="Mila.detener();">Detener</button>
-    <button id="botonDebug" onclick="Mila.debug();">Debug</button>
-    Velocidad: <span id="sliderPlaceholder"></span>
+  <div id="navegacion-izquierda" class="nav" style="float:left;">
+    <span class="nav_sec">
+    <span class="nav_span">Reiniciar al ejecutar
+    <input id="checkReiniciarAlEjectuar" type="checkbox"></span></span>
+    <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonEjecutar" onclick="Mila.ejecutar();">Ejecutar</a>
+    <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonDetener" onclick="Mila.detener();">Detener</a>
+    <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonDebug" onclick="Mila.debug();">Debug</a>
+    <span class="nav_sec"><span class="nav_span">Velocidad:</span><span id="sliderPlaceholder"></span></span>
   </div>
-  <div id="navegacion-derecha" style="float:right;">
-    <button id="botonNuevo" onclick="Mila.Blockly.nuevo(Mila.workspace);">Nuevo</button>
-    <button id="botonGuardar" onclick="Mila.Blockly.exportar(Mila.workspace, prompt('Nombre:'));">Guardar</button>
-    <button id="botonCargar" onclick="Mila.Blockly.importar(Mila.workspace);">Cargar</button>
+  <div id="navegacion-derecha" class="nav" style="float:right;">
+    <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonNuevo" onclick="Mila.Blockly.nuevo(Mila.workspace);">Nuevo</a>
+    <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonGuardar" onclick="Mila.Blockly.exportar(Mila.workspace, prompt('Nombre:'));">Guardar</a>
+    <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonCargar" onclick="Mila.Blockly.importar(Mila.workspace);">Cargar</a>
   </div>
 
-  <table><tr><td>
+  <table><tr><td class="np">
     <!-- Canvas -->
     <canvas id="canvas"></canvas>
-  </td><td>
+  </td><td class="np">
     <!-- Area para Blockly -->
     <div id="blockly"></div>
   </td></tr></table>

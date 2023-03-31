@@ -1,13 +1,60 @@
 #blockly {            /* Zona de bloques (Blockly) */
-  border:1px solid;     /* Borde negro fino */
-  margin-top:0px;       /* Contra el borde superior */
-  margin-left:-3px;     /* Dejo un poco de espacio respecto al canvas */
-  margin-bottom:-10px;  /* Contra el borde inferior */
+  background-color: #2265;
+  border:1px solid #559;
+  margin-top:-10px;       /* Contra el borde superior */
+  margin-left:-5px;     /* Dejo un poco de espacio respecto al canvas */
+  margin-bottom:-18px;  /* Contra el borde inferior */
+  padding: 5px;
 }
 
 #canvas {             /* Área de juego (Canvas) */
-  border:1px solid;     /* Borde negro fino */
+  background-color: #fff;
+  border:3px solid #559;
+  border-radius: 5px;
   margin-top:0px;       /* Contra el borde superior */
-  margin-left:-10px;    /* Contra el borde izquierdo */
+  margin-left:-3px;      /* Contra el borde izquierdo */
   margin-bottom:-15px;  /* Contra el borde inferior */
+}
+
+#navegacion-derecha {
+  margin-right: 5px;
+}
+
+body {
+  background-color: #69C5;
+}
+
+.nav {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.nav_sec {
+  border:1px solid #559;
+  border-radius: 10px;
+  margin-right: 5px;
+  margin-left: 5px;
+  padding: 5px;
+  background-color: #fff;
+}
+
+.nav_span {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.np {
+  padding-left: 5px;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: 0;
+}
+
+#slider_max_0 {
+  padding-right: 5px;
+}
+
+.btn-flat {
+  background-color: #588;
+  color: #fff;
 }

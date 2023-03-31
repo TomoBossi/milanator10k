@@ -33,7 +33,7 @@ Canvas.inicializar = function() {
 // Esta función se ejecuta cada vez que cambia el tamaño de la ventana del navegador
 //  (y una vez cuando se inicializa la página)
 Canvas.redimensionar = function() {
-  Canvas.div.height = window.innerHeight-40;
+  Canvas.div.height = window.innerHeight-50;
   Canvas.ancho = 400; //window.innerWidth/2-5;
   Canvas.div.width = Canvas.ancho;
   Canvas.actualizar();

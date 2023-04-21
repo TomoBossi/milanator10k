@@ -127,3 +127,11 @@ Mila.Blockly.agrupar = function(f) {
     Blockly.Events.setGroup(false);
   }
 };
+
+const oldGenerator = Blockly.Generator.prototype.blockToCode;
+Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
+  if (block && block.previousConnection && !block.previousConnection.targetConnection) {
+    return '';
+  }
+  return oldGenerator.call(this, block, opt_thisOnly);
+};

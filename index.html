@@ -32,14 +32,13 @@
 
 <body>
   <!-- Barra superior de navegación (onda menú) -->
-  <div id="navegacion-izquierda" class="nav" style="float:left;">
-    <span class="nav_sec">
-    <span class="nav_span">Reiniciar al ejecutar
-    <input id="checkReiniciarAlEjectuar" type="checkbox"></span></span>
+  <div id="navegacion-izquierda" class="nav" style="float:left;margin-left:5px">
     <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonEjecutar" onclick="Mila.ejecutar();">Ejecutar</a>
     <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonDetener" onclick="Mila.detener();">Detener</a>
     <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonDebug" onclick="Mila.debug();">Debug</a>
     <span class="nav_sec"><span class="nav_span">Velocidad:</span><span id="sliderPlaceholder"></span></span>
+    <span id="nombreJugador" class="nav_sec" style="display:none"></span>
+    <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonPerfil" onclick="Mila.cambiarPerfil();">Perfil</a>
   </div>
   <div id="navegacion-derecha" class="nav" style="float:right;">
     <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonNuevo" onclick="Mila.Blockly.nuevo(Mila.workspace);">Nuevo</a>
@@ -48,11 +47,11 @@
   </div>
 
   <table><tr><td class="np">
-    <!-- Canvas -->
-    <canvas id="canvas"></canvas>
-  </td><td class="np">
     <!-- Area para Blockly -->
     <div id="blockly"></div>
+  </td><td class="np">
+    <!-- Canvas -->
+    <canvas id="canvas"></canvas>
   </td></tr></table>
 </body>
 

@@ -56,9 +56,9 @@ Interprete.compilar = function(codigo) {
 Interprete.nuevo = function(robot, codigo) {
   const initApi = function (interprete, global) {
     for (let a of Juego.acciones || []) {
-      var wrapper = function() {
+      var wrapper = function(args) {
         robot.interprete.retraso = Juego.tiemposBloque[a];
-        return Juego.mover(robot, a);
+        return Juego.mover(robot, a, args);
       }
       interprete.setProperty(global, a,
           interprete.createNativeFunction(wrapper));

@@ -104,6 +104,7 @@ Mila.inicializar = function() {
       CLOCK.setearVelocidad(Math.floor(valor));
     }
   });
+  Mila.pedirPerfil();
 };
 
 // Registra handlers para todos los eventos
@@ -122,14 +123,15 @@ Mila.redimensionar = function() {
 
 // Inicia la ejecución
 Mila.ejecutar = function(){
-  if (document.getElementById('checkReiniciarAlEjectuar').checked) {
+  if (/* reiniciar al ejecutar */true) {
     Mila.detener();
   } else {
     CLOCK.detener();
     Interprete.detener();
     Mila.reiniciarRobots();
   }
-  const codigo = Mila.generador.workspaceToCode(Mila.workspace);
+  const codigo = (Mila.generador.header || '') + Mila.generador.workspaceToCode(Mila.workspace);
+  console.log(codigo);
   Interprete.compilar(codigo);
   Interprete.ejecutar();
   CLOCK.iniciar(function(){
@@ -152,7 +154,7 @@ Mila.debug = function(){
     Mila.paso();
   } else {
     Mila.detener();
-    const codigo = Mila.generador.workspaceToCode(Mila.workspace);
+    const codigo = (Mila.generador.header || '') + Mila.generador.workspaceToCode(Mila.workspace);
     Interprete.compilar(codigo);
     Interprete.debug();
   }
@@ -213,6 +215,30 @@ Mila.agregarImagenFuenteLocal = function(ruta, idArg) {
 Mila.roles = function() {
   return Juego.roles();
 }
+
+Mila.cambiarPerfil = function() {
+  let s = document.getElementById("nombreJugador");
+  if (s.style.display == 'none') {
+    Mila.pedirPerfil();
+  } else {
+    let b = document.getElementById("botonPerfil");
+    Juego.jugador(null);
+    s.style.display = 'none';
+    b.innerHTML = "Perfil";
+  }
+};
+
+Mila.pedirPerfil = function() {
+  let miNombre = prompt("¿Cómo te llamás?");
+  if (miNombre) {
+    let s = document.getElementById("nombreJugador");
+    let b = document.getElementById("botonPerfil");
+    s.innerHTML = miNombre;
+    s.style.display = 'unset';
+    b.innerHTML = "X";
+    Juego.jugador(miNombre);
+  }
+};
 
 // Antes de terminar de cargar la página, llamo a esta función
 Mila.preCarga();

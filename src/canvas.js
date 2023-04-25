@@ -77,7 +77,7 @@ Canvas.imagen = function(id, x, y, s=1, r=0) {
 
 // Escribe texto en el canvas
 Canvas.texto = function(t, x, y, s=1, r=0) {
-  Canvas.contexto.font = `${20*s}px serif`;
+  Canvas.contexto.font = `${20*s}px arial`;
   Canvas.contexto.fillText(t, x, y);
 }
 

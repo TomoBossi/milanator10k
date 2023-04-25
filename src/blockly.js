@@ -132,6 +132,8 @@ const oldGenerator = Blockly.Generator.prototype.blockToCode;
 Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   if (block && block.previousConnection && !block.previousConnection.targetConnection) {
     return '';
+  } else if (block && block.outputConnection && !block.outputConnection.targetConnection) {
+    return ['',0];
   }
   return oldGenerator.call(this, block, opt_thisOnly);
 };

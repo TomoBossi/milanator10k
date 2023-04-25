@@ -31,7 +31,8 @@ Juego.acciones = [
   'crearAlbum','faltaFiguEnÁlbum',
   'comprarFigu','pegarFigu',
   'crearContador','incrementarContador','contador',
-  'crearAnotador','anotar','anotador'
+  'crearAnotador','anotar','anotador',
+  'decir'
 ];
 
 Mila.generador.header = 'var anotador = [];\n'
@@ -57,7 +58,7 @@ for (let a of Juego.acciones) {
 }
 
 Juego.argsBloque = function(bloque) {
-  if (bloque.type == 'anotar') {
+  if (['anotar','decir'].includes(bloque.type)) {
     return Mila.generador.valueToCode(bloque, "X", 0);
   }
   return '';
@@ -70,6 +71,7 @@ Juego.preCarga = function() {
     Mila.agregarImagenFuenteLocal(`figus/figu${i}.png`, `figu${i}`);
   }
   Mila.agregarImagenFuenteLocal(`figus/vacia.png`, 'vacia');
+  Mila.agregarImagenFuenteLocal(`figus/nota.png`, 'nota');
   Mila.agregarScriptFuente('src/juegos/figus/seedrandom.js');
 };
 
@@ -182,6 +184,7 @@ Juego.mover = function(robot, direccion, args) {
           e.del = true;
         }
       } else {
+        Canvas.nuevoObjeto({imagen:"nota", x:-5, y:255,scale:0.67});
         Canvas.nuevoObjeto({texto:"Anotador:", x:10, y:260});
       }
       Juego.elementos.anotador = [];
@@ -194,7 +197,7 @@ Juego.mover = function(robot, direccion, args) {
       } else {
         let a = {texto:(args === undefined ? '?' : args),
           x:10+50*(Math.floor(Juego.elementos.anotador.length % 8)),
-          y:290 + 20*(Math.floor(Juego.elementos.anotador.length / 8))
+          y:285 + 24*(Math.floor(Juego.elementos.anotador.length / 8))
         };
         Juego.elementos.anotador.push(a);
         Canvas.nuevoObjeto(a);
@@ -211,6 +214,9 @@ Juego.mover = function(robot, direccion, args) {
         e['elem' + i] = Juego.elementos.anotador[i];
       }
       return e;
+      break;
+    case 'decir':
+      alert(args === undefined ? '?' : args);
       break;
     default:
       //

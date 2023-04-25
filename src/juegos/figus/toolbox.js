@@ -30,5 +30,6 @@ Juego.toolbox =
     <category name="Operaciones">\
       <block type="logic_compare_figus"></block>\
       <block type="math_on_list_figus"></block>\
+      <block type="decir"></block>\
     </category>\
   </xml>';

@@ -79,9 +79,21 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   },
   { // Anotador
     "type": "anotador",
-    "message0": "anotador",
+    "message0": "anotaciones",
     "style": "colour_blocks",
     "output":"Array"
+  },
+  { // Imprimir resultado
+    "type": "decir",
+    "message0": "Decir %1",
+    "args0": [{
+      "type":"input_value",
+      "name":"X",
+      "check":"Number"
+    }],
+    "style": "colour_blocks",
+    "previousStatement":true,
+    "nextStatement":true
   },
   {
     "type": "logic_compare_figus",

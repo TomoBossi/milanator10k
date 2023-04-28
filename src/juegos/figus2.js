@@ -1,6 +1,6 @@
 /**
 
-  FIGUS
+  FIGUS 2
 
   Juego para simular el llenado de un álbum de figuritas
 
@@ -26,41 +26,49 @@ Juego.tiemposBloque = {
   math_number:2,
   logic_boolean:2,
   math_on_list_figus:4,
-  logic_compare_figus:2
+  logic_compare_figus:2,
+  math_arithmetic:2,
+  math_random_int:4
 };
 
 Juego.acciones = [
-  'crearAlbum','faltaFiguEnÁlbum',
-  'comprarFigu','pegarFigu',
-  'crearContador','incrementarContador','contador',
-  'crearAnotador','anotar','anotador',
+  'var_assign','album','figuActual','contador','anotador',
+  'listaVacia','lista6Ceros','list_assign','list_push',
   'decir'
 ];
 
-Mila.generador.header = 'var var_anotador = [];\n'
+Mila.generador.header = 'var var_album = undefined;\nvar var_anotador = undefined;\nvar var_figuActual = undefined;\nvar var_contador = undefined;\n';
 
 for (let a of Juego.acciones) {
   Mila.generador.addReservedWords(a);
   Mila.generador[a] = function(bloque){
-    if (a == 'anotador') {
-      return [`(anotador()||var_anotador)`,0];
+    if (['album','figuActual','contador','anotador'].includes(a)) {
+      return [`var_${a}`,0];
     }
-    let resultado = a + `(${Juego.argsBloque(bloque)})`;
-    if (['faltaFiguEnÁlbum','contador'].includes(a)) {
-      resultado = [resultado, 0];
-    } else {
-      resultado += ";\n";
-      if (a == 'anotar') {
-        resultado += `var_anotador.push(${Juego.argsBloque(bloque)});\n`;
-      }
+    if (a == 'listaVacia') {
+      return ["[]",0];
     }
-    return resultado;
+    if (a == 'lista6Ceros') {
+      return ["[0,0,0,0,0,0]",0];
+    }
+    let args = Juego.argsBloque(bloque);
+    if (a == 'var_assign') {
+      return `${bloque.getFieldValue('VAR')} = ${args};\n`;
+    }
+    if (a == 'list_assign') {
+      let pos = Mila.generador.valueToCode(bloque, "POS", 0);
+      return `${bloque.getFieldValue('VAR')}[${pos}] = ${args};\n`;
+    }
+    if (a == 'list_push') {
+      return `${bloque.getFieldValue('VAR')}.push(${args});\n`;
+    }
+    return `${a}(${args});\n`;
   };
   Juego.tiemposBloque[a] = 4;
 }
 
 Juego.argsBloque = function(bloque) {
-  if (['anotar','decir'].includes(bloque.type)) {
+  if (['decir','var_assign','list_push','list_assign'].includes(bloque.type)) {
     return Mila.generador.valueToCode(bloque, "X", 0);
   }
   return '';
@@ -120,14 +128,13 @@ Juego.mover = function(robot, direccion, args) {
         Canvas.nuevoObjeto(img);
       }
       break;
-    case 'faltaFiguEnÁlbum':
+    case 'album':
       if (Juego.elementos.album.length == 0) {
         alert("Todavía no creaste el álbum");
         Mila.detener();
         break;
       }
-      return Juego.elementos.album.some((x) => x.imagen === 'vacia');
-      break;
+      return undefined;
     case 'comprarFigu':
       if ('figuActual' in Juego.elementos) {
         Juego.elementos.figuActual.del = true;
@@ -212,7 +219,6 @@ Juego.mover = function(robot, direccion, args) {
         break;
       }
       return undefined;
-      break;
     case 'decir':
       alert(args === undefined ? '?' : args);
       break;

@@ -39,7 +39,8 @@ const INTERVALO_INICIAL = 25;
   // El primero es el valor por defecto
 Mila.argumentosValidos = {
   idioma:['es','en'],
-  juego:['demo','figus','figus2']
+  juego:['demo','figus','figus2'],
+  toolbox:['on','off']
 }
 
 // Inicializa todo lo necesario antes de que se termine de cargar la página

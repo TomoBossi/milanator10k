@@ -22,6 +22,7 @@ Mila.Blockly = {};
 
 // Inicializa el entorno Blockly
 Mila.Blockly.inicializar = function() {
+  Mila.Blockly.inicializarToolbox();
   Mila.Blockly.inyectarBlockly();   // Inyectar la interfaz de Blockly
   // Agrego un listener de eventos para guardar el workspace tras cada cambio
   Mila.workspace.addChangeListener(function(evento) {
@@ -38,6 +39,30 @@ Mila.Blockly.inicializar = function() {
     }
     Blockly.Events.recordUndo = true;
   }, 100); // Si lo hago ahora no funciona, así que espero un poco
+};
+
+// Inicializa el toolbox de Blockly
+Mila.Blockly.inicializarToolbox = function() {
+  if (Mila.argumentoURL('toolbox') === 'off') {
+    const toolboxDom = Blockly.Xml.textToDom(Juego.toolbox);
+    const categorias = [];
+    const bloques = [];
+    for (let c of toolboxDom.children) {
+      if (c.nodeName === 'category') {
+        for (let b of c.children) {
+          bloques.push(b);
+        }
+        categorias.push(c);
+      }
+    }
+    for (let c of categorias) {
+      toolboxDom.removeChild(c);
+    }
+    for (let b of bloques) {
+      toolboxDom.appendChild(b);
+    }
+    Juego.toolbox = Blockly.Xml.domToText(toolboxDom);
+  }
 };
 
 // Inyecta la interfaz Blockly en la div con id "blockly" y guarda el resultado en Mila.workspace

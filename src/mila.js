@@ -39,7 +39,7 @@ const INTERVALO_INICIAL = 25;
   // El primero es el valor por defecto
 Mila.argumentosValidos = {
   idioma:['es','en'],
-  juego:['demo','figus','figus2'],
+  juego:['demo','figus','figus2','figus0'],
   toolbox:['on','off']
 }
 

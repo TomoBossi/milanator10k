@@ -1,9 +1,6 @@
 #blockly {            /* Zona de bloques (Blockly) */
   background-color: #2265;
   border:1px solid #559;
-  margin-top:-10px;       /* Contra el borde superior */
-  margin-left:-5px;     /* Dejo un poco de espacio respecto al canvas */
-  margin-bottom:-18px;  /* Contra el borde inferior */
   padding: 5px;
 }
 
@@ -11,9 +8,8 @@
   background-color: #fff;
   border:3px solid #559;
   border-radius: 5px;
-  margin-top:0px;       /* Contra el borde superior */
-  margin-left:-3px;      /* Contra el borde izquierdo */
-  margin-bottom:-15px;  /* Contra el borde inferior */
+  margin-left:0px;       /* Contra el borde izquierdo */
+  margin-bottom:-5px;    /* Contra el borde inferior */
 }
 
 #navegacion-derecha {

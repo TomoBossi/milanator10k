@@ -87,6 +87,7 @@ Mila.cargarJuego = function() {
 // Inicializa todo lo necesario una vez que se termina de cargar la página
 Mila.inicializar = function() {
   Mila.div = document.getElementById('blockly');
+  Layout.inicializar();          // Inicializar la interfaz
   Canvas.inicializar();          // Inicializar el canvas
   Juego.inicializar();           // Inicializar el juego
   Mila.Blockly.inicializar();    // Inyectar la interfaz de Blockly
@@ -117,8 +118,8 @@ Mila.registrarEventos = function () {
 //  (y una vez cuando se inicializa la página)
 Mila.redimensionar = function() {
   Canvas.redimensionar();
-  Mila.div.style.height = `${window.innerHeight-50}px`;
-  Mila.div.style.width = `${window.innerWidth-Canvas.ancho-10}px`;
+  Mila.div.style.height = `${Layout.altoBlockly()}px`;
+  Mila.div.style.width = `${Layout.anchoBlockly()}px`;
   Blockly.svgResize(Mila.workspace);
 };
 

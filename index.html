@@ -12,6 +12,7 @@
     // en lugar de agregar los scripts _compressed, se agregan los _uncompressed.
     const version_comprimida = false;
   </script>
+  <script src="src/layout.js"></script>
   <script src="src/mila.js"></script>
   <script src="src/canvas.js"></script>
   <script src="src/interprete.js"></script>
@@ -46,13 +47,11 @@
     <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonCargar" onclick="Mila.Blockly.importar(Mila.workspace);">Cargar</a>
   </div>
 
-  <table><tr><td class="np">
-    <!-- Area para Blockly -->
-    <div id="blockly"></div>
-  </td><td class="np">
-    <!-- Canvas -->
-    <canvas id="canvas"></canvas>
-  </td></tr></table>
+  <table id="layout"></table>
+  <!-- Area para Blockly -->
+  <div id="blockly"></div>
+  <!-- Canvas -->
+  <canvas id="canvas"></canvas>
 </body>
 
 </html>

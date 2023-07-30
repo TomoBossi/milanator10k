@@ -89,6 +89,8 @@ Juego.preCarga = function() {
   Mila.agregarScriptFuente('src/juegos/figus/seedrandom.js');
 };
 
+Juego.layout = {dist:Layout.Vertical};
+
 // Inicializa todo lo necesario una vez que se termina de cargar la página
 Juego.inicializar = function() {
   Juego.robots = []; // Necesito que el campo "robots" exista antes de llamar a reiniciar

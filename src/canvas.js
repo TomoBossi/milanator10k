@@ -7,6 +7,7 @@
   VARIABLES
     div         La div del canvas en el documento
     ancho       El ancho del canvas en píxeles
+    alto        El alto del canvas en píxeles
     objetos     Lista de objetos que se dibujan en el canvas
 
   FUNCIONES
@@ -33,8 +34,9 @@ Canvas.inicializar = function() {
 // Esta función se ejecuta cada vez que cambia el tamaño de la ventana del navegador
 //  (y una vez cuando se inicializa la página)
 Canvas.redimensionar = function() {
-  Canvas.div.height = window.innerHeight-50;
-  Canvas.ancho = 400; //window.innerWidth/2-5;
+  Canvas.alto = Layout.altoCanvas();
+  Canvas.div.height = Canvas.alto;
+  Canvas.ancho = Layout.anchoCanvas();
   Canvas.div.width = Canvas.ancho;
   Canvas.actualizar();
 };

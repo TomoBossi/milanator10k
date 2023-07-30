@@ -39,7 +39,7 @@ const INTERVALO_INICIAL = 25;
   // El primero es el valor por defecto
 Mila.argumentosValidos = {
   idioma:['es','en'],
-  juego:['demo','figus','figus2','figus0'],
+  juego:['demo','figus','figus2','figus0','incendio'],
   toolbox:['on','off']
 }
 
@@ -230,6 +230,7 @@ Mila.cambiarPerfil = function() {
 };
 
 Mila.pedirPerfil = function() {
+  if ('pedirPerfil' in Juego && Juego.pedirPerfil == false) { return; }
   let miNombre = prompt("¿Cómo te llamás?");
   if (miNombre) {
     let s = document.getElementById("nombreJugador");

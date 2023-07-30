@@ -69,7 +69,9 @@ Mila.Blockly.inicializarToolbox = function() {
 Mila.Blockly.inyectarBlockly = function() {
   // Toma como segundo argumento un objeto de configuración
   Mila.workspace = Blockly.inject('blockly', {
-    toolbox: Juego.toolbox                      // Set de bloques del juego actual
+    toolbox: Juego.toolbox,                     // Set de bloques del juego actual
+    move:{wheel:true, drag:true},
+    zoom:{wheel:true, controls:true, minScale:0.1},
   });
 };
 

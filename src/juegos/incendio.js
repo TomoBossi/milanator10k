@@ -89,7 +89,7 @@ Juego.preCarga = function() {
   Mila.agregarScriptFuente('src/juegos/figus/seedrandom.js');
 };
 
-Juego.layout = {dist:Layout.Vertical};
+Juego.layout = {dist:Layout.Horizontal};
 
 // Inicializa todo lo necesario una vez que se termina de cargar la página
 Juego.inicializar = function() {

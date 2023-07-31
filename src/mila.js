@@ -117,10 +117,11 @@ Mila.registrarEventos = function () {
 // Esta función se ejecuta cada vez que cambia el tamaño de la ventana del navegador
 //  (y una vez cuando se inicializa la página)
 Mila.redimensionar = function() {
-  Canvas.redimensionar();
   Mila.div.style.height = `${Layout.altoBlockly()}px`;
   Mila.div.style.width = `${Layout.anchoBlockly()}px`;
   Blockly.svgResize(Mila.workspace);
+  Canvas.redimensionar();
+  Layout.redimensionar();
 };
 
 // Inicia la ejecución

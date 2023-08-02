@@ -127,6 +127,7 @@ Mila.redimensionar = function() {
 
 // Inicia la ejecución
 Mila.ejecutar = function(){
+  document.getElementById("botonEjecutar").classList.remove("glow");
   if (/* reiniciar al ejecutar */true) {
     Mila.detener();
   } else {

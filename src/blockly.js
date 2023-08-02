@@ -27,6 +27,9 @@ Mila.Blockly.inicializar = function() {
   // Agrego un listener de eventos para guardar el workspace tras cada cambio
   Mila.workspace.addChangeListener(function(evento) {
     sessionStorage.xml = Mila.Blockly.generarXml(Mila.workspace);
+    if (evento instanceof Blockly.Events.Move && evento.newParentId != null) {
+      document.getElementById("botonEjecutar").classList.add("glow");
+    }
   });
   setTimeout(function() {
     Blockly.Events.recordUndo = false;

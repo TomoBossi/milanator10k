@@ -106,6 +106,7 @@ Mila.inicializar = function() {
       CLOCK.setearVelocidad(Math.floor(valor));
     }
   });
+  document.getElementById('slider_input_0').style.margin = '-6px 0px';
   Mila.pedirPerfil();
 };
 

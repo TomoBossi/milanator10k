@@ -94,7 +94,12 @@ Mila.Blockly.generarXml = function(workspace) {
 
 // Crea los bloques en un workspace a partir de un xml en formato string
 Mila.Blockly.cargarDesdeXml = function(workspace, xml) {
-  Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+  try {
+    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+  } catch (error) {
+    workspace.clear();
+    Mila.Blockly.crearBloqueInicial(Mila.workspace);
+  }
 };
 
 // Quita todos los bloques para empezar un proyecto nuevo

@@ -13,7 +13,7 @@
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   { // Crear álbum
     "type": "crearAlbum",
-    "message0": "Crear álbum",
+    "message0": "Crear álbum vacío",
     "style": "colour_blocks",
     "previousStatement":true,
     "nextStatement":true

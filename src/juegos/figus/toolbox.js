@@ -2,7 +2,7 @@
 Juego.toolbox =
   '<xml>\
     <category name="Álbum">\
-      <block type="crearAlbum"></block>\
+      <block type="crearAlbum'+(Juego.tamanioFijo=='N'?'X':'')+'"></block>\
       <block type="faltaFiguEnÁlbum"></block>\
     </category>\
     <category name="Figus">\

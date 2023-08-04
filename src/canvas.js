@@ -22,7 +22,9 @@
 
 **/
 
-const Canvas = {};
+const Canvas = {
+  composiciones:{}
+};
 
 // Inicializa todo lo necesario una vez que se termina de cargar la página
 Canvas.inicializar = function() {
@@ -66,15 +68,19 @@ Canvas.limpiar = function() {
 
 // Dibuja una imagen en el canvas
 Canvas.imagen = function(id, x, y, s=1, r=0) {
-  Canvas.contexto.save();
-  const img = document.getElementById(id);
-  let w = img.width*s;
-  let h = img.height*s;
-  Canvas.contexto.translate(x+w/2,y+h/2);
-  Canvas.contexto.rotate(r*Math.PI/180);
-  Canvas.contexto.translate(-x-w/2,-y-h/2);
-  Canvas.contexto.drawImage(img, x, y, w, h);
-  Canvas.contexto.restore();
+  if (id in Canvas.composiciones) {
+    Canvas.dibujarComposicion(Canvas.composiciones[id], x, y, s, r);
+  } else {
+    Canvas.contexto.save();
+    const img = document.getElementById(id);
+    let w = img.width*s;
+    let h = img.height*s;
+    Canvas.contexto.translate(x+w/2,y+h/2);
+    Canvas.contexto.rotate(r*Math.PI/180);
+    Canvas.contexto.translate(-x-w/2,-y-h/2);
+    Canvas.contexto.drawImage(img, x, y, w, h);
+    Canvas.contexto.restore();
+  }
 };
 
 // Escribe texto en el canvas
@@ -89,4 +95,35 @@ Canvas.texto = function(t, x, y, s=1, r=0) {
   // Campos adicionales opcionales: scale, rot
 Canvas.nuevoObjeto = function(objeto) {
   Canvas.objetos.push(objeto);
+};
+
+Canvas.dibujarComposicion = function(cs, xG, yG, sG=1, rG=0) {
+  for (let c of cs) {
+    Canvas.contexto.save();
+    if (c.clase == 'rect') {
+      let x = xG;
+      x += ('x' in c ? c.x : 0)*sG;
+      let y = yG;
+      y += ('y' in c ? c.y : 0)*sG;
+      let w = ('w' in c ? c.w : 100)*sG;
+      let h = ('h' in c ? c.h : 100)*sG;
+      Canvas.contexto.beginPath();
+      if ('borde' in c) {
+        Canvas.contexto.strokeStyle = c.borde;
+      }
+      if ('fondo' in c) {
+        Canvas.contexto.fillStyle = c.fondo;
+        Canvas.contexto.fillRect(x, y, w, h);
+        Canvas.contexto.strokeRect(x, y, w, h);
+      } else {
+        Canvas.contexto.rect(x, y, w, h);
+        Canvas.contexto.stroke();
+      }
+    }
+    Canvas.contexto.restore();
+  }
+};
+
+Canvas.declararComposicion = function(nombre, significado) {
+  Canvas.composiciones[nombre] = significado;
 };

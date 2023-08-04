@@ -18,7 +18,7 @@
 
 **/
 
-const Juego = {pedirPerfil:false};
+const Juego = {};
 
 Juego.tiemposBloque = {
   controls_whileUntil:2,

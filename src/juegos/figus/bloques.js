@@ -17,6 +17,17 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "colour_blocks",
     "previousStatement":true,
     "nextStatement":true
+  },{ // Crear álbum variable
+    "type": "crearAlbumX",
+    "message0": "Crear álbum vacío para %1 figus",
+    "args0": [{
+      "type":"input_value",
+      "name":"X",
+      "check":"Number"
+    }],
+    "style": "colour_blocks",
+    "previousStatement":true,
+    "nextStatement":true
   },{ // Falta figu en álbum
     "type": "faltaFiguEnÁlbum",
     "message0": "falta figu en álbum",

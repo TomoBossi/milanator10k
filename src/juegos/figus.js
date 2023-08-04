@@ -18,7 +18,9 @@
 
 **/
 
-const Juego = {};
+const Juego = {
+  tamanioAlbum: 6,
+};
 
 Juego.tiemposBloque = {
   controls_whileUntil:2,
@@ -30,7 +32,7 @@ Juego.tiemposBloque = {
 };
 
 Juego.acciones = [
-  'crearAlbum','faltaFiguEnÁlbum',
+  'crearAlbum','crearAlbumX','faltaFiguEnÁlbum',
   'comprarFigu','pegarFigu',
   'crearContador','incrementarContador','contador',
   'crearAnotador','anotar','anotador',
@@ -60,7 +62,7 @@ for (let a of Juego.acciones) {
 }
 
 Juego.argsBloque = function(bloque) {
-  if (['anotar','decir'].includes(bloque.type)) {
+  if (['anotar','decir','crearAlbumX'].includes(bloque.type)) {
     return Mila.generador.valueToCode(bloque, "X", 0);
   }
   return '';
@@ -69,8 +71,13 @@ Juego.argsBloque = function(bloque) {
 // Inicializa todo lo necesario antes de que se termine de cargar la página
 Juego.preCarga = function() {
   Mila.agregarScriptFuente(`src/juegos/figus/bloques.js`);
-  for (let i=0; i<6; i++) {
-    Mila.agregarImagenFuenteLocal(`figus/figu${i}.png`, `figu${i}`);
+  Juego.tamanioFijo = Mila.argumentoURL('fix') || 'S'; // 'N' o 'S'
+  if (Juego.tamanioFijo == 'N') {
+    Juego.imagenesCargadas = 0;
+  } else {
+    for (let i=0; i<6; i++) {
+      Mila.agregarImagenFuenteLocal(`figus/figu${i}.png`, `figu${i}`);
+    }
   }
   Mila.agregarImagenFuenteLocal(`figus/vacia.png`, 'vacia');
   Mila.agregarImagenFuenteLocal(`figus/nota.png`, 'nota');
@@ -106,19 +113,10 @@ Juego.mover = function(robot, direccion, args) {
   let i;
   switch (direccion) {
     case 'crearAlbum':
-      if (Juego.elementos.album.length > 0) {
-        for (let e of Juego.elementos.album) {
-          e.del = true;
-        }
-        Juego.elementos.album = [];
-      } else {
-        Canvas.nuevoObjeto({texto:"Álbum:", x:10, y:120});
-      }
-      for (i=0; i<6; i++) {
-        let img = {imagen:'vacia', x:10+65*i, y:130, rot:0, scale:.3};
-        Juego.elementos.album.push(img);
-        Canvas.nuevoObjeto(img);
-      }
+      Juego.nuevoAlbum(6);
+      break;
+    case 'crearAlbumX':
+      Juego.nuevoAlbum(args === undefined ? '6' : args);
       break;
     case 'faltaFiguEnÁlbum':
       if (Juego.elementos.album.length == 0) {
@@ -132,7 +130,7 @@ Juego.mover = function(robot, direccion, args) {
       if ('figuActual' in Juego.elementos) {
         Juego.elementos.figuActual.del = true;
       }
-      i = Math.floor(Math.random()*6);
+      i = Math.floor(Math.random()*Juego.tamanioAlbum);
       Juego.elementos.figuActual = {imagen:`figu${i}`, x:120, y:10, scale:.3, i:i};
       Canvas.nuevoObjeto(Juego.elementos.figuActual);
       break;
@@ -148,8 +146,9 @@ Juego.mover = function(robot, direccion, args) {
         break;
       }
       i = Juego.elementos.figuActual.i;
-      Juego.elementos.figuActual.x = 10+65*i;
+      Juego.elementos.figuActual.x = 10+Juego.espacioEntreFigus()*i;
       Juego.elementos.figuActual.y = 130;
+      Juego.elementos.figuActual.scale = Juego.escalaFigus();
       Juego.elementos.album[i].del = true;
       Juego.elementos.album[i] = Juego.elementos.figuActual;
       delete Juego.elementos.figuActual;
@@ -288,4 +287,57 @@ Blockly.JavaScript['logic_compare_figus'] = function(block) {
   var argument1 = Blockly.JavaScript.valueToCode(block, 'B', order) || '0';
   var code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
+};
+
+Juego.cargarMasImagenes = function(k) {
+  while (Juego.imagenesCargadas < k) {
+    Canvas.declararComposicion(`figu${Juego.imagenesCargadas}`, Juego.nuevaFigu(Juego.imagenesCargadas));
+    Juego.imagenesCargadas++;
+  }
+};
+
+Juego.nuevaFigu = function(k) {
+  return [{
+    clase:'rect', x:25, fondo:`#${Juego.colorFigu(k)}`, w:145, h:195
+  }].concat(
+    [10,80,160,230,310,380].map(function(x) {
+      return {clase:'rect', x:30+x%150, y:20+55*Math.floor(x/150), w:40, h:40,
+        fondo:`#${Juego.colorFigu(x*k+(k/5)-x)}`, borde:`#${Juego.colorFigu(k-(x*k/5)+x)}`};
+    })
+  );
+};
+
+Juego.colorFigu = function(k) {
+  const C = (x) => ((Math.floor(x)*25)%255).toString(16).padStart(2, '0');
+  return C(k+200)+C(60*(k/10)+k+100)+C(120*(k/20)+k+75);
+};
+
+Juego.escalaFigus = function() {
+  return 0.3 - 0.1 * ((Math.min(Juego.tamanioAlbum,20)-6)/6);
+};
+
+Juego.espacioEntreFigus = function() {
+  return 180*Juego.escalaFigus();
+};
+
+Juego.nuevoAlbum = function(k) {
+  if (Juego.elementos.album.length > 0) {
+    for (let e of Juego.elementos.album) {
+      e.del = true;
+    }
+    Juego.elementos.album = [];
+  } else {
+    Canvas.nuevoObjeto({texto:"Álbum:", x:10, y:120});
+  }
+  if (Juego.tamanioFijo == 'N') {
+    Juego.tamanioAlbum = k;
+    Juego.cargarMasImagenes(Juego.tamanioAlbum);
+  } else {
+    Juego.tamanioAlbum = 6;
+  }
+  for (i=0; i<Juego.tamanioAlbum; i++) {
+    let img = {imagen:'vacia', x:10+Juego.espacioEntreFigus()*i, y:130, rot:0, scale:Juego.escalaFigus()};
+    Juego.elementos.album.push(img);
+    Canvas.nuevoObjeto(img);
+  }
 };

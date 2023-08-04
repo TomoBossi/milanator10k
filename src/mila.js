@@ -107,7 +107,7 @@ Mila.inicializar = function() {
     }
   });
   document.getElementById('slider_input_0').style.margin = '-6px 0px';
-  Mila.pedirPerfil();
+  if ('pedirPerfil' in Juego && Juego.pedirPerfil) { Mila.pedirPerfil(); }
 };
 
 // Registra handlers para todos los eventos
@@ -182,10 +182,10 @@ Mila.reiniciarRobots = function() {
 Mila.argumentoURL = function(key) {
   let valor = location.search.match(new RegExp('[?&]' + key + '=([^&]+)'));
   const validos = Mila.argumentosValidos[key];
-  const defecto = validos[0];
+  const defecto = (validos == null ? null : validos[0]);
   if (valor) {
     valor = decodeURIComponent(valor[1].replace(/\+/g, '%20'));
-    if (!validos.includes(valor)) {
+    if (validos != null && !validos.includes(valor)) {
       valor = defecto;
     }
   } else {
@@ -234,7 +234,6 @@ Mila.cambiarPerfil = function() {
 };
 
 Mila.pedirPerfil = function() {
-  if ('pedirPerfil' in Juego && Juego.pedirPerfil == false) { return; }
   let miNombre = prompt("¿Cómo te llamás?");
   if (miNombre) {
     let s = document.getElementById("nombreJugador");

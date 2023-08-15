@@ -185,7 +185,7 @@ Juego.mover = function(robot, direccion, args) {
           e.del = true;
         }
       } else {
-        Canvas.nuevoObjeto({imagen:"nota", x:-5, y:255,scale:0.67});
+        Canvas.nuevoObjeto({imagen:"nota", x:-5, y:255,scale:0.81});
         Canvas.nuevoObjeto({texto:"Anotador:", x:10, y:260});
       }
       Juego.elementos.anotador = [];
@@ -196,9 +196,9 @@ Juego.mover = function(robot, direccion, args) {
         Mila.detener();
         break;
       } else {
-        let a = {texto:(args === undefined ? '?' : args),
-          x:10+50*(Math.floor(Juego.elementos.anotador.length % 8)),
-          y:285 + 24*(Math.floor(Juego.elementos.anotador.length / 8))
+        let a = {texto:(args === undefined ? '?' : args), scale:.9,
+          x:50 + 42*(Math.floor(Juego.elementos.anotador.length % 10)),
+          y:290 + 29*(Math.floor(Juego.elementos.anotador.length / 10))
         };
         Juego.elementos.anotador.push(a);
         Canvas.nuevoObjeto(a);

@@ -19,6 +19,7 @@ Juego.toolbox =
       <block type="anotar"></block>\
       <block type="anotador"></block>\
     </category>\
+    <category name="Funciones" custom="PROCEDURE"></category>\
     <category name="Control">\
       <block type="controls_repeat_ext"></block>\
       <block type="controls_whileUntil"></block>\

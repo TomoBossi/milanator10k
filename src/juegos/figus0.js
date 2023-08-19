@@ -8,3 +8,4 @@
 
 Mila.agregarScriptFuente('src/juegos/figus.js');
 Juego.pedirPerfil = true;
+Juego.modoFuncionesDefault = function() { return 'none'; };

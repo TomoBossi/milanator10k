@@ -20,6 +20,7 @@
 
 const Juego = {
   tamanioAlbum: 6,
+  modoFuncionesDefault: function() { return 'none'; }
 };
 
 Juego.tiemposBloque = {

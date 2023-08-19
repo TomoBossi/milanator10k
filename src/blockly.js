@@ -46,6 +46,32 @@ Mila.Blockly.inicializar = function() {
 
 // Inicializa el toolbox de Blockly
 Mila.Blockly.inicializarToolbox = function() {
+  let modoFunciones = Mila.argumentoURL('funciones');
+  if (modoFunciones === '-') {
+    modoFunciones = ('modoFuncionesDefault' in Juego)
+      ? Juego.modoFuncionesDefault()
+      : 'all';
+  }
+  // Borrar categoría de funciones
+  if (modoFunciones === 'none') {
+    const toolboxDom = Blockly.Xml.textToDom(Juego.toolbox);
+    const categorias = [];
+    for (let c of toolboxDom.children) {
+      if (c.nodeName === 'category' && c.getAttribute('custom') === 'PROCEDURE') {
+        categorias.push(c);
+      }
+    }
+    for (let c of categorias) {
+      toolboxDom.removeChild(c);
+    }
+    Juego.toolbox = Blockly.Xml.domToText(toolboxDom);
+  } else if (modoFunciones === 'func') {
+    delete Blockly.Blocks['procedures_defnoreturn'];
+  } else if (modoFunciones === 'proc') {
+    delete Blockly.Blocks['procedures_defreturn'];
+  }
+  delete Blockly.Blocks['procedures_ifreturn'];
+  // Borrar categorías
   if (Mila.argumentoURL('toolbox') === 'off') {
     const toolboxDom = Blockly.Xml.textToDom(Juego.toolbox);
     const categorias = [];
@@ -56,6 +82,19 @@ Mila.Blockly.inicializarToolbox = function() {
           bloques.push(b);
         }
         categorias.push(c);
+        if (c.getAttribute('custom') === 'PROCEDURE') {
+          for (let b of ['procedures_defnoreturn','procedures_defreturn']) {
+            if (Blockly.Blocks[b]) {
+              let e = document.createElement('block');
+              e.setAttribute('type', b);
+              let f = document.createElement('field');
+              f.setAttribute('name', 'NAME');
+              f.innerHTML = Blockly.Msg.UNNAMED_KEY;
+              e.appendChild(f);
+              bloques.push(e);
+            }
+          }
+        }
       }
     }
     for (let c of categorias) {
@@ -73,8 +112,9 @@ Mila.Blockly.inyectarBlockly = function() {
   // Toma como segundo argumento un objeto de configuración
   Mila.workspace = Blockly.inject('blockly', {
     toolbox: Juego.toolbox,                     // Set de bloques del juego actual
-    move:{wheel:true, drag:true},
+    move:{wheel:true, drag:true, scrollbars:true},
     zoom:{wheel:true, controls:true, minScale:0.1},
+    trashcan:true,
   });
 };
 

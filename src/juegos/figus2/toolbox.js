@@ -14,6 +14,7 @@ Juego.toolbox =
       <block type="list_push"></block>\
       <block type="list_assign"></block>\
     </category>\
+    <category name="Funciones" custom="PROCEDURE"></category>\
     <category name="Control">\
       <block type="controls_repeat_ext"></block>\
       <block type="controls_whileUntil"></block>\

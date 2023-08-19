@@ -18,7 +18,9 @@
 
 **/
 
-const Juego = {};
+const Juego = {
+  modoFuncionesDefault: function() { return 'all'; }
+};
 
 Juego.tiemposBloque = {
   controls_whileUntil:2,

@@ -13,6 +13,7 @@ Juego.toolbox =
       <block type="crearContador"></block>\
       <block type="incrementarContador"></block>\
     </category>\
+    <category name="Funciones" custom="PROCEDURE"></category>\
     <category name="Control">\
       <block type="controls_repeat_ext"></block>\
       <block type="controls_whileUntil"></block>\

@@ -40,7 +40,7 @@ Juego.acciones = [
   'decir'
 ];
 
-Mila.generador.header = 'var var_anotador = [];\n'
+Mila.generador.header = 'var var_anotador = [];\n';
 
 for (let a of Juego.acciones) {
   Mila.generador.addReservedWords(a);
@@ -254,7 +254,7 @@ Blockly.JavaScript['math_on_list_figus'] = function(block) {
     case 'PROD':
       list = Blockly.JavaScript.valueToCode(block, 'X',
           Blockly.JavaScript.ORDER_MEMBER) || '[]';
-      code = list + '.reduce(function(x, y) {return x + y;})';
+      code = list + '.reduce(function(x, y) {return x * y;})';
       break;
     case 'AVERAGE':
       var functionName = Blockly.JavaScript.provideFunction_(

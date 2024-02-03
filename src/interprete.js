@@ -58,7 +58,7 @@ Interprete.nuevo = function(robot, codigo) {
     for (let a of Juego.acciones || []) {
       var wrapper = function(args) {
         robot.interprete.retraso = Juego.tiemposBloque[a];
-        return Juego.mover(robot, a, args);
+        return Juego.mover(robot, a, Interprete.limpiarArgumentos(args));
       }
       interprete.setProperty(global, a,
           interprete.createNativeFunction(wrapper));
@@ -179,4 +179,17 @@ Interprete.iluminar = function(idBloque) {
 Interprete.bloquePrimitivo = function(tipo) {
   return ['derecha','izquierda','arriba','abajo'].includes(tipo) ||
     (Juego.acciones || []).includes(tipo);
+}
+
+Interprete.limpiarArgumentos = function(args) {
+  if (typeof args === 'object') {
+    if ('F' in args && args.F === 'Array') {
+      let lista = [];
+      for (let i=0; i<args.a.length; i++) {
+        lista.push(args.a[i]);
+      }
+      return lista;
+    }
+  }
+  return args;
 }

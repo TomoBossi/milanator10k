@@ -95,6 +95,7 @@ Canvas.texto = function(t, x, y, s=1, r=0) {
   // Campos adicionales opcionales: scale, rot
 Canvas.nuevoObjeto = function(objeto) {
   Canvas.objetos.push(objeto);
+  return objeto;
 };
 
 Canvas.dibujarComposicion = function(cs, xG, yG, sG=1, rG=0) {

@@ -231,8 +231,8 @@ Juego.mover = function(robot, direccion, args) {
   let i, v, pos;
   switch (direccion) {
     case 'var_assign':
-      v = args.a.v;
-      args = args.a.a;
+      v = args.v;
+      args = args.a;
       switch (v) {
         case 'var_album':
           crearAlbum(args);
@@ -251,9 +251,10 @@ Juego.mover = function(robot, direccion, args) {
       }
       break;
     case 'list_assign':
-      v = args.a.v;
-      pos = args.a.p;
-      args = args.a.a;
+      v = args.v;
+      pos = args.p;
+      args = args.a;
+      let list_len = 0;
       switch (v) {
         case 'var_album':
           if (Juego.elementos.album.length == 0) {
@@ -261,17 +262,23 @@ Juego.mover = function(robot, direccion, args) {
             Mila.detener();
             break;
           }
+          list_len = Juego.elementos.album.length;
           pegarFigu(pos, args);
           break;
         case 'var_anotador':
+          list_len = Juego.elementos.anotador.length;
           break;
         default:
           //
       }
+      if (pos >= list_len) {
+        alert(`No podés asignar la posición ${pos} porque la lista tiene tamaño ${list_len}`);
+        Mila.detener();
+      }
       break;
     case 'list_push':
-      v = args.a.v;
-      args = args.a.a;
+      v = args.v;
+      args = args.a;
       switch (v) {
         case 'var_album':
           if (Juego.elementos.album.length == 0) {

@@ -114,7 +114,7 @@ Interprete.nuevo = function(robot, codigo) {
       }
     },
     avanzarHastaProximoBloque: function() {
-      while(!(robot.interprete.retraso && robot.interprete.retraso > 0)){
+      while(!(robot.interprete.retraso && robot.interprete.retraso > 0) && Interprete.estado !== DETENIDO){
         // Mientras no llegue al próximo bloque
         if(!this.interprete.step()){
           robot.estado = FIN;
@@ -189,7 +189,17 @@ Interprete.limpiarArgumentos = function(args) {
         lista.push(args.a[i]);
       }
       return lista;
+    } else if (mismosElementos(Object.keys(args), ['L', 'O', 'a', 'la'])) {
+      let obj = {};
+      for (let k in args.a) {
+        obj[k] = Interprete.limpiarArgumentos(args.a[k]);
+      }
+      return obj;
     }
   }
   return args;
+}
+
+function mismosElementos(a1, a2) {
+  return a1.every((x) => a2.includes(x)) && a2.every((x) => a1.includes(x));
 }

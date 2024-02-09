@@ -1,15 +1,16 @@
 // Toolbox para el juego Diez mil
 Juego.toolbox =
   '<xml>\
-    <category name="Dados">\
+    <!--category name="Dados">\
       <block type="tirarCubilete"></block>\
       <block type="dadosArrojados"></block>\
-    </category>\
+    </category-->\
     <category name="Puntajes">\
-      <block type="crearTabla"></block>\
-      <block type="acumularPuntos"></block>\
-      <block type="puntosParaDados"></block>\
+      <!--block type="puntosParaDados"></block-->\
       <block type="hay10Mil"></block>\
+      <block type="puntosRonda'+
+        (Juego.tamanioFijo=='S'?'Fix"':'"><field name="K">4</field')+
+      '></block>\
     </category>\
     <category name="Variables">\
       <block type="variables_set"></block>\
@@ -17,6 +18,9 @@ Juego.toolbox =
     </category>\
     <category name="Listas">\
       <block type="listaVacia"></block>\
+      <block type="listaDeCeros'+
+      (Juego.tamanioFijo=='S'?'Fix"':'"><field name="K">4</field')+
+      '></block>\
       <block type="list_push_var"></block>\
       <block type="list_assign_var"></block>\
     </category>\
@@ -33,7 +37,9 @@ Juego.toolbox =
     <category name="Operaciones">\
     <block type="math_arithmetic"></block>\
     <block type="logic_compare_10k"></block>\
+    <block type="logic_negate"></block>\
     <block type="math_on_list_10k"></block>\
+    <block type="list_plus_list"></block>\
     <block type="count"></block>\
     <block type="decir"></block>\
     </category>\

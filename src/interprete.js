@@ -58,6 +58,9 @@ Interprete.nuevo = function(robot, codigo) {
     for (let a of Juego.acciones || []) {
       var wrapper = function(args) {
         robot.interprete.retraso = Juego.tiemposBloque[a];
+        if (typeof robot.interprete.retraso === 'function') {
+          robot.interprete.retraso = robot.interprete.retraso(args);
+        }
         return Juego.mover(robot, a, Interprete.limpiarArgumentos(args));
       }
       interprete.setProperty(global, a,
@@ -169,6 +172,9 @@ Interprete.iluminar = function(idBloque) {
       !Interprete.bloquePrimitivo(bloque.type)) {
     // Asigno un retraso para la ejecución del próximo bloques
     Interprete.retraso = Juego.tiemposBloque[bloque.type];
+    if (typeof Interprete.retraso === 'function') {
+      Interprete.retraso = Interprete.retraso(bloque);
+    }
   }
   Mila.workspace.highlightBlock(idBloque);
   return null; // Necesario para que los bloques de expresiones se evalúen

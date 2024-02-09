@@ -25,28 +25,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "dados arrojados",
     "style": "colour_blocks",
     "output":"Array"
-  },{ // Crear tabla de puntajes
-    "type": "crearTabla",
-    "message0": "Crear tabla de puntajes para %1 jugadores",
-    "args0": [{
-      "type":"input_value",
-      "name":"X",
-      "check":"Number"
-    }],
-    "style": "colour_blocks",
-    "previousStatement":true,
-    "nextStatement":true
-  },{ // Acumular puntos de la ronda
-    "type": "acumularPuntos",
-    "message0": "Acumular puntajes %1",
-    "args0": [{
-      "type":"input_value",
-      "name":"X",
-      "check":"Array"
-    }],
-    "style": "colour_blocks",
-    "previousStatement":true,
-    "nextStatement":true
   },{ // Puntos para dados
     "type": "puntosParaDados",
     "message0": "puntaje con dados %1",
@@ -59,9 +37,32 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output":"Array"
   },{ // Hay 10 mil
     "type": "hay10Mil",
-    "message0": "alguien llegó a 10 mil puntos",
+    "message0": "alguien en %1 llegó a 10 mil puntos",
+    "args0":[{
+      "type":"input_value",
+      "name":"X",
+      "check":"Array"
+    }],
     "style": "colour_blocks",
-    "output":"Boolean"
+    "output":"Boolean",
+    "tooltip":"Toma una lista de números correspondientes a los puntajes de cada jugador y devuelve si alguno ya llegó a 10 mil puntos"
+  },{ // Puntajes de los jugadores tras realizar una ronda
+    "type": "puntosRonda",
+    "message0": "puntaje de una ronda de %1 jugadores",
+    "args0":[{
+      "type": "field_number",
+      "name": "K",
+      "value": 4
+    }],
+    "style": "colour_blocks",
+    "output":"Array",
+    "tooltip":"Juega una ronda y devuelve una lista con la cantidad de puntos que hizo cada jugador"
+  },{ // Puntajes de los jugadores tras realizar una ronda (con cantidad fija de jugadores)
+    "type": "puntosRondaFix",
+    "message0": "puntaje de una ronda",
+    "style": "colour_blocks",
+    "output":"Array",
+    "tooltip":"Juega una ronda y devuelve una lista con la cantidad de puntos que hizo cada jugador"
   },{ // Imprimir resultado
     "type": "decir",
     "message0": "Decir %1",
@@ -104,9 +105,38 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "colour_blocks",
     "previousStatement":true,
     "nextStatement":true
+  },{ // Suma de listas
+    "type": "list_plus_list",
+    "message0": "Suma de listas %1 y %2",
+    "args0": [{
+      "type":"input_value",
+      "name":"A",
+      "check":"Array"
+    },{
+      "type":"input_value",
+      "name":"B",
+      "check":"Array"
+    }],
+    "style": "colour_blocks",
+    "output":"Array"
   },{ // Lista vacía
     "type": "listaVacia",
     "message0": "lista vacía",
+    "style": "colour_blocks",
+    "output":"Array"
+  },{ // Lista de ceros
+    "type": "listaDeCeros",
+    "message0": "lista con %1 ceros",
+    "args0":[{
+      "type": "field_number",
+      "name": "K",
+      "value": 4
+    }],
+    "style": "colour_blocks",
+    "output":"Array"
+  },{ // Lista de 4 ceros
+    "type": "listaDeCerosFix",
+    "message0": "lista con 4 ceros",
     "style": "colour_blocks",
     "output":"Array"
   },{ // Comparación

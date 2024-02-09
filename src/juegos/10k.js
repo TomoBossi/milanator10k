@@ -16,12 +16,18 @@
 **/
 
 const posicionesDados = [
-  {x:10,y:270},{x:150,y:270},
-  {x:80,y:340},
-  {x:10,y:410},{x:150,y:410},
+  {x:10,y:160},{x:130,y:130},
+  {x:90,y:190},
+  {x:50,y:250},{x:170,y:220},
 ];
 
-const Juego = {};
+const Juego = {
+  CUBILETE: 0,
+  DADO: 1,
+  DELAY: 2,
+  RONDA: 3,
+  JUGADA: 4
+};
 
 Juego.tiemposBloque = {
   controls_whileUntil:2,
@@ -41,21 +47,42 @@ Juego.tiemposBloque = {
 
 Juego.acciones = [
   'tirarCubilete','dadosArrojados',
-  'crearTabla','acumularPuntos','puntosParaDados','hay10Mil',
+  'puntosParaDados','hay10Mil','puntosRonda','puntosRondaFix',
   'decir'
 ];
 
-Mila.generador.header = 'var var_puntajes = undefined;\nvar var_dados = undefined;\n';
+Mila.generador.header = 'var var_dados = undefined;\n';
 
 Mila.generador.listaVacia = function(bloque) {
   return ["[]",0];
 };
 
+Mila.generador.listaDeCeros = function(bloque) {
+  let k = bloque.getFieldValue("K");
+  let v = [];
+  for (let i=0; i<k; i++) {
+    v.push("0");
+  }
+  return [`[${v.join(",")}]`,0];
+};
+
+Mila.generador.listaDeCerosFix = function(bloque) {
+  return ["[0,0,0,0]",0];
+};
+
+const JsVariablesSet = Blockly.JavaScript['variables_set'];
+Mila.generador.variables_set = function(bloque) {
+  let v = Blockly.JavaScript.variableDB_.getName(bloque.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
+  let n = bloque.getField('VAR').getText();
+  return JsVariablesSet(bloque) + `variables_set({n:"${n}",valor:${v}});\n`;
+};
+
 Mila.generador.list_assign_var = function(bloque) {
   let v = Blockly.JavaScript.variableDB_.getName(bloque.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
+  let n = bloque.getField('VAR').getText();
   let pos = Mila.generador.valueToCode(bloque, "POS", 0);
   let val = Mila.generador.valueToCode(bloque, "X", 0);
-  return `${v}[${pos}] = ${val};\n`;
+  return `${v}[${pos}] = ${val};\nlist_assign({v:${v},p:${pos},n:"${n}",valor:${val}});\n`;
 };
 
 Mila.generador.list_push_var = function(bloque) {
@@ -64,36 +91,48 @@ Mila.generador.list_push_var = function(bloque) {
   return `${v}.push(${val});\n`;
 };
 
+Mila.generador.list_plus_list = function(bloque) {
+  let l1 = Mila.generador.valueToCode(bloque, "A", 0);
+  let l2 = Mila.generador.valueToCode(bloque, "B", 0);
+  return [`list_plus_list({l1:${l1},l2:${l2}})`,0];
+};
+
 for (let a of Juego.acciones) {
-  if (!(a in ['tirarCubilete','acumularPuntos'])) { // Casos especiales, no tienen función asociada
+  if (!(a in ['tirarCubilete'])) { // Casos especiales, no tienen función asociada
     Mila.generador.addReservedWords(a);
   }
   Mila.generador[a] = function(bloque){
     let args = Juego.argsBloque(bloque);
     if (a == 'dadosArrojados') {
-      return [`(dadosArrojados()||var_dados)`,0];
+      return [`(iluminar("${bloque.id}")||dadosArrojados()||var_dados)`,0];
     } else if (a == 'tirarCubilete') { // Caso especial porque tengo que actualizar var_dados
       return Juego.tirarCubilete();
-    } else if (a == 'acumularPuntos') { // Caso especial porque tengo que actualizar var_puntajes
-      return Juego.acumularPuntos(args);
     }
     let resultado = a + `(${args})`;
-    if (['puntosParaDados','hay10Mil'].includes(a)) {
-      resultado = [resultado, 0];
+    if (['puntosRonda','puntosRondaFix'].includes(a)) {
+      resultado = `(jugarRonda(${Juego.tamanioFijo=='S' ? 4 : bloque.getFieldValue("K")})||${resultado})`;
+    }
+    if (['puntosParaDados','hay10Mil','puntosRonda','puntosRondaFix'].includes(a)) {
+      resultado = [`(iluminar("${bloque.id}")||${resultado})`, 0];
     } else {
       resultado += ";\n";
-      if (a == 'crearTabla') {
-        const cantJugadores = args === '' ? 0 : args;
-        resultado += `var_puntajes = [];\nfor(var i=0; i<${cantJugadores}; i++){\n  var_puntajes.push(0);\n}\n`;
-      }
     }
     return resultado;
   };
-  Juego.tiemposBloque[a] = 2;
+  Juego.tiemposBloque[a] =
+    a === 'puntosRondaFix'
+    ? (bloque_o_args) => Juego.tiempos[Juego.JUGADA]*4
+    : a === 'puntosRonda'
+    ? (bloque_o_args) => {
+      let k = (bloque_o_args instanceof Blockly.BlockSvg) ? bloque_o_args.getFieldValue("K") : bloque_o_args;
+      return Juego.tiempos[Juego.JUGADA]*k;
+    }
+    : 10
+  ;
 }
 
 // Adicionales para los casos especiales
-for (let a of ['inicializarCubilete', 'tirarDado', 'verificarPuntaje', 'anotarPuntos']) {
+for (let a of ['jugarRonda', 'inicializarCubilete', 'tirarDado', 'list_assign', 'list_plus_list', 'variables_set']) {
   Juego.acciones.push(a);
   Mila.generador.addReservedWords(a);
 }
@@ -105,14 +144,18 @@ Mila.generador.count = function(bloque){
 };
 
 Juego.argsBloque = function(bloque) {
-  if (['acumularPuntos','puntosParaDados','decir','crearTabla'].includes(bloque.type)) {
+  if (['puntosParaDados','decir','hay10Mil'].includes(bloque.type)) {
     return Mila.generador.valueToCode(bloque, "X", 0);
+  }
+  if (['puntosRonda'].includes(bloque.type)) {
+   return bloque.getFieldValue("K");
   }
   return '';
 }
 
 // Inicializa todo lo necesario antes de que se termine de cargar la página
 Juego.preCarga = function() {
+  Juego.tamanioFijo = Mila.argumentoURL('fix') || 'S'; // 'N' o 'S'
   Mila.agregarScriptFuente(`src/juegos/10k/bloques.js`);
   Mila.agregarScriptFuente('src/juegos/figus/seedrandom.js');
   for (let i=1; i<=6; i++) {
@@ -133,8 +176,14 @@ Juego.reiniciar = function() {
   Juego.robots = [{rol:"AUTO"}];
   Juego.elementos = {
     dados: [],
-    cubilete: Canvas.nuevoObjeto({imagen:'cubilete', x:50, y:70, scale:.75})
+    cubilete: Canvas.nuevoObjeto({imagen:'cubilete', x:250, y:70, scale:.75}),
+    variables:{}
   };
+  let y=400;
+  for (let v of Blockly.getMainWorkspace().getAllVariableNames()) {
+    Juego.elementos.variables[v] = Canvas.nuevoObjeto({texto:`${v} : -`, x:10, y});
+    y += 30;
+  }
   Math.seedrandom('nombreJugador' in Juego ? Juego.nombreJugador : Math.random());
 }
 
@@ -147,7 +196,7 @@ Juego.detener = function() {
 
 // Ordena el movimiento de un robot en el mapa
 Juego.mover = function(robot, direccion, args) {
-  let i;
+  let i, n, valor;
   switch (direccion) {
     case 'tirarCubilete':
       break; // Caso especial porque tengo que actualizar var_dados
@@ -159,93 +208,75 @@ Juego.mover = function(robot, direccion, args) {
       }
       return undefined;
       break;
-    case 'crearTabla':
-      const cantJugadores = args === undefined ? 0 : args;
-      Juego.elementos.tabla = [];
-      for (let i=0; i<cantJugadores; i++) {
-        Juego.elementos.tabla.push(0);
-      }
-      if ('textos' in Juego.elementos) {
-        for (let texto of Juego.elementos.textos) {
-          texto.del = true;
-        }
-      }
-      Juego.elementos.textos = [];
-      for (let i=0; i<cantJugadores; i++) {
-        Juego.elementos.textos.push(Canvas.nuevoObjeto({texto:"0", x:360, y:120+30*i}));
-      }
-      Juego.elementos.textos.push(Canvas.nuevoObjeto({texto:"Puntajes", x:300, y:100}));
-      for (let i=0; i<cantJugadores; i++) {
-        Juego.elementos.textos.push(Canvas.nuevoObjeto({texto:`J ${i+1}`, x:300, y:120+30*i}));
-      }
-      break;
-    case 'acumularPuntos':
-      break; // Caso especial porque tengo que actualizar var_puntajes
     case 'puntosParaDados':
       if (args === undefined) { return 0; }
-      let cantUnos = args.reduce((rec,x) => rec + (x == 1 ? 1 : 0), 0);
-      let cantCincos = args.reduce((rec,x) => rec + (x == 5 ? 1 : 0), 0);
-      let puntos = cantUnos*100 + cantCincos*50;
-      if (cantUnos >= 3) {
-        puntos += 1000;
-      }
-      if (cantCincos >= 3) {
-        puntos += 500;
-      }
-      return puntos;
+      return Juego.puntosParaDados(args);
       break;
     case 'hay10Mil':
-      if (!('tabla' in Juego.elementos)) {
-        alert("Todavía no creaste la tabla de puntajes");
-        Mila.detener();
-        break;
-      }
-      return Juego.elementos.tabla.some((x) => x >= 10000);
+      return (args || []).some((x) => x >= 10000);
+      break;
+    case 'puntosRonda':
+      return Juego.puntosParaRonda();
+      break;
+    case 'puntosRondaFix':
+      return Juego.puntosParaRonda();
       break;
     case 'decir':
       alert(args === undefined ? '?' : args);
       break;
     // Adicionales para los casos especiales
+    case 'jugarRonda':
+      Juego.rondaActual = {
+        jugadores: args,
+        puntos: []
+      };
+      Juego.tiempos[Juego.RONDA] = Juego.tiempos[Juego.JUGADA]*args;
+      Juego.animacion = {
+        k:Juego.RONDA,
+        t:0
+      };
+      return undefined;
+      break;
     case 'inicializarCubilete':
-      for (let dado of Juego.elementos.dados) {
-        dado.del = true;
-      }
-      Juego.elementos.dados = [];
-      Juego.elementos.cubilete.rot = 180;
-      Juego.elementos.cubilete.y = 10;
+      Juego.inicializarCubilete();
       break;
     case 'tirarDado':
-      let i = Juego.elementos.dados.length;
-      let dado = 1+Math.floor(Math.random()*6);
-      let rot = Math.floor(Math.random()*360);
-      let x = posicionesDados[i].x + Math.floor(Math.random()*30);
-      let y = posicionesDados[i].y + Math.floor(Math.random()*30);
-      Juego.elementos.dados.push(Canvas.nuevoObjeto({imagen:`dado${dado}`, x, y, scale:.4, rot}));
-      if (i == 4) {
-        Juego.elementos.cubilete.rot = 0;
-        Juego.elementos.cubilete.y = 70;
-      }
-      return dado;
+      return Juego.tirarDado();
       break;
-    case 'verificarPuntaje':
-      if (!('tabla' in Juego.elementos)) {
-        alert("Todavía no creaste la tabla de puntajes");
+    case 'variables_set':
+      n = args.n;
+      valor = args.valor;
+      Juego.elementos.variables[n].valor = valor;
+      Juego.elementos.variables[n].texto = `${n} : ${valor}`;
+      break;
+    case 'list_assign':
+      let pos = args.p;
+      let list_len = args.v.length;
+      if (pos >= list_len) {
+        alert(`No podés asignar la posición ${pos} porque la lista tiene tamaño ${list_len}`);
         Mila.detener();
         return false;
-        break;
       }
-      if (args.length != Juego.elementos.tabla.length) {
-        alert(`La lista de puntajes a actualizar no puede tener ${args.length > Juego.elementos.tabla.length ? 'más' : 'menos'} elementos que la cantidad de jugadores`);
-        Mila.detener();
-        return false;
-        break;
-      }
+      n = args.n;
+      valor = args.valor;
+      let valorAnterior = Juego.elementos.variables[n].valor;
+      valorAnterior[pos] = valor;
+      Juego.elementos.variables[n].texto = `${n} : ${valorAnterior}`;
       return true;
       break;
-    case 'anotarPuntos':
-      for (let i=0; i<Juego.elementos.tabla.length; i++) {
-        Juego.elementos.tabla[i] += args[i];
-        Juego.elementos.textos[i].texto = Juego.elementos.tabla[i];
+    case 'list_plus_list':
+      let l1 = args.l1;
+      let l2 = args.l2;
+      if (l1.length == l2.length) {
+        let l3 = [];
+        for (let i=0; i<l1.length; i++) {
+          l3.push(l1[i] + l2[i]);
+        }
+        return l3;
+      } else {
+        alert(`No podés sumar las listas ${l1} y ${l2} porque tienen tamaños distintos`);
+        Mila.detener();
+        return [];
       }
       break;
     default:
@@ -259,12 +290,40 @@ Juego.tirarCubilete = function() {
   return resultado;
 };
 
-Juego.acumularPuntos = function(args) {
-  const puntos = args === '' ? "[]" : args;
-  let resultado = `var puntos = ${puntos};\nif (verificarPuntaje(puntos)) {\n` +
-  '  for (var i=0; i<var_puntajes.length; i++) {\n    var_puntajes[i] += puntos[i];\n  }\n' +
-  '  anotarPuntos(puntos);\n}\n';
-  return resultado;
+Juego.puntosParaRonda = function() {
+  return Juego.rondaActual.puntos;
+};
+
+Juego.inicializarCubilete = function() {
+  Juego.elementos.cubilete.rot = 0;
+  Juego.elementos.cubilete.y = 10;
+  for (let dado of Juego.elementos.dados) {
+    dado.del = true;
+  }
+  Juego.elementos.dados = [];
+};
+
+Juego.tirarDado = function() {
+  let i = Juego.elementos.dados.length;
+  let dado = 1+Math.floor(Math.random()*6);
+  let rot = Math.floor(Math.random()*360);
+  let x = posicionesDados[i].x + Math.floor(Math.random()*30);
+  let y = posicionesDados[i].y + Math.floor(Math.random()*30);
+  Juego.elementos.dados.push(Canvas.nuevoObjeto({imagen:`dado${dado}`, x, y, scale:.4, rot, val:dado}));
+  return dado;
+};
+
+Juego.puntosParaDados = function(dados) {
+  let cantUnos = dados.reduce((rec,x) => rec + (x == 1 ? 1 : 0), 0);
+  let cantCincos = dados.reduce((rec,x) => rec + (x == 5 ? 1 : 0), 0);
+  let puntos = cantUnos*100 + cantCincos*50;
+  if (cantUnos >= 3) {
+    puntos += 1000;
+  }
+  if (cantCincos >= 3) {
+    puntos += 500;
+  }
+  return puntos;
 };
 
 Juego.roles = function() {
@@ -273,7 +332,79 @@ Juego.roles = function() {
   ];
 };
 
+Juego.tiempos = {
+  [Juego.CUBILETE]:25,
+  [Juego.DADO]:9,
+  [Juego.DELAY]:20
+};
+
+Juego.tiempos[Juego.JUGADA] = Juego.tiempos[Juego.CUBILETE] + 5*Juego.tiempos[Juego.DADO] + Juego.tiempos[Juego.DELAY];
+
 Juego.paso = function() {
+  if ('animacion' in Juego) {
+    let tLocal = Juego.animacion.t;
+    let animacion = Juego.animacion.k;
+    let tFin = Juego.tiempos[animacion];
+    if (animacion == Juego.RONDA) {
+      tLocal = tLocal % Juego.tiempos[Juego.JUGADA];
+      animacion = tLocal < Juego.tiempos[Juego.CUBILETE]
+        ? Juego.CUBILETE
+        : tLocal < Juego.tiempos[Juego.CUBILETE] + 5*Juego.tiempos[Juego.DADO]
+        ? Juego.DADO
+        : Juego.DELAY
+      ;
+      if (tLocal == Juego.tiempos[Juego.JUGADA] -1) { // Terminó una jugada
+        Juego.rondaActual.puntos.push(Juego.elementos.puntosJugada.texto);
+      }
+      if (animacion == Juego.DADO) {
+        tLocal = (tLocal-Juego.tiempos[Juego.CUBILETE]) % Juego.tiempos[Juego.DADO];
+      } else if (animacion == Juego.DELAY) {
+        tLocal -= (Juego.tiempos[Juego.CUBILETE] + 5*Juego.tiempos[Juego.DADO]);
+      }
+    }
+    switch (animacion) {
+      case Juego.CUBILETE:
+        if (tLocal == 0) {
+          Juego.inicializarCubilete();
+        } else if (tLocal == Juego.tiempos[Juego.CUBILETE]-1) {
+          Juego.elementos.cubilete.rot = 225;
+          Juego.elementos.cubilete.y = -20;
+        } else {
+          Juego.elementos.cubilete.y = 70 + 15*Math.sin(tLocal);
+        }
+        break;
+      case Juego.DADO:
+        if (tLocal == 0) {
+          Juego.tirarDado();
+        } else if (tLocal % 3 == 0) {
+          Juego.elementos.dados[Juego.elementos.dados.length-1].imagen =
+            `dado${tLocal == Juego.tiempos[Juego.DADO]-1
+              ? Juego.elementos.dados[Juego.elementos.dados.length-1].val
+              : 1+Math.floor(Math.random()*6)
+            }`
+          ;
+          Juego.elementos.dados[Juego.elementos.dados.length-1].rot -= 15;
+        }
+        break;
+      case Juego.DELAY:
+        if (tLocal == 0) {
+          let puntos = Juego.puntosParaDados(Juego.elementos.dados.map(x => x.val));
+          Juego.elementos.puntosJugada = Canvas.nuevoObjeto(
+            {texto:puntos, x:100, y:100, val:puntos}
+          );
+        } else if (tLocal == Juego.tiempos[Juego.DELAY]-1) {
+          Juego.elementos.puntosJugada.del = true;
+        } else {
+          Juego.elementos.puntosJugada.y -= 1;
+        }
+      default:
+        break;
+    }
+    Juego.animacion.t ++;
+    if (tLocal == tFin) { // Terminó la animación
+      delete Juego.animacion;
+    }
+  }
 };
 
 Juego.jugador = function(nombre) {

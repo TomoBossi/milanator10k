@@ -39,7 +39,7 @@ const INTERVALO_INICIAL = 25;
   // El primero es el valor por defecto
 Mila.argumentosValidos = {
   idioma:['es','en'],
-  juego:['demo','figus','figus2','figus0','10k','incendio'],
+  juego:['demo','figus','figus2','figus0','10k','10k2','incendio'],
   toolbox:['on','off'],
   funciones:['-','func','proc','all','none']
 }
@@ -90,8 +90,8 @@ Mila.inicializar = function() {
   Mila.div = document.getElementById('blockly');
   Layout.inicializar();          // Inicializar la interfaz
   Canvas.inicializar();          // Inicializar el canvas
-  Juego.inicializar();           // Inicializar el juego
   Mila.Blockly.inicializar();    // Inyectar la interfaz de Blockly
+  Juego.inicializar();           // Inicializar el juego
   Mila.registrarEventos();       // Registrar handlers para eventos
   Interprete.inicializar();      // Inicializar el intérprete
   Mila.redimensionar();          // Llamo a esta función para que ajuste el tamaño al iniciar

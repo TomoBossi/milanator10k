@@ -3,10 +3,16 @@
   Bloques para el juego Diez mil
       tirarCubilete
       dadosArrojados
+      jugarRonda
+      puntajeRonda
       crearTabla
       acumularPuntos
+      puntosJugadores
       puntosParaDados
       hay10Mil
+      crearContador
+      incrementarContador
+      contador
       decir
       logic_compare_10k
       math_on_list_10k
@@ -23,6 +29,43 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   },{ // Dados arrojados
     "type": "dadosArrojados",
     "message0": "dados arrojados",
+    "style": "colour_blocks",
+    "output":"Array"
+  },{ // Jugar ronda
+    "type": "jugarRonda",
+    "message0": "Jugar ronda",
+    "style": "colour_blocks",
+    "previousStatement":true,
+    "nextStatement":true
+  },{ // Puntaje ronda
+    "type": "puntajeRonda",
+    "message0": "puntaje de ronda",
+    "style": "colour_blocks",
+    "output":"Array"
+  },{ // Crear tabla
+    "type": "crearTabla",
+    "message0": "Crear lista de puntajes",
+    "style": "colour_blocks",
+    "previousStatement":true,
+    "nextStatement":true
+  },{ // Acumular puntos
+    "type": "acumularPuntos",
+    "message0": "Acumular puntos con %1 y %2",
+    "args0": [{
+      "type":"input_value",
+      "name":"A",
+      "check":"Array"
+    },{
+      "type":"input_value",
+      "name":"B",
+      "check":"Array"
+    }],
+    "style": "colour_blocks",
+    "previousStatement":true,
+    "nextStatement":true
+  },{ // Tabla de puntajes
+    "type": "puntosJugadores",
+    "message0": "puntajes acumulados",
     "style": "colour_blocks",
     "output":"Array"
   },{ // Puntos para dados
@@ -46,6 +89,23 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "colour_blocks",
     "output":"Boolean",
     "tooltip":"Toma una lista de números correspondientes a los puntajes de cada jugador y devuelve si alguno ya llegó a 10 mil puntos"
+  },{ // Crear contador
+    "type": "crearContador",
+    "message0": "Crear contador",
+    "style": "colour_blocks",
+    "previousStatement":true,
+    "nextStatement":true
+  },{ // Incrementar contador
+    "type": "incrementarContador",
+    "message0": "Incrementar contador",
+    "style": "colour_blocks",
+    "previousStatement":true,
+    "nextStatement":true
+  },{ // Contador
+    "type": "contador",
+    "message0": "contador",
+    "style": "colour_blocks",
+    "output":"Number"
   },{ // Puntajes de los jugadores tras realizar una ronda
     "type": "puntosRonda",
     "message0": "puntaje de una ronda de %1 jugadores",
@@ -65,7 +125,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip":"Juega una ronda y devuelve una lista con la cantidad de puntos que hizo cada jugador"
   },{ // Imprimir resultado
     "type": "decir",
-    "message0": "Decir %1",
+    "message0": "Mostrar %1",
     "args0": [{
       "type":"input_value",
       "name":"X"

@@ -46,8 +46,10 @@ Juego.tiemposBloque = {
 };
 
 Juego.acciones = [
+  'crearTabla', 'acumularPuntos', 'jugarRonda', 'puntajeRonda',
   'tirarCubilete','dadosArrojados',
-  'puntosParaDados','hay10Mil','puntosRonda','puntosRondaFix',
+  'puntosParaDados','hay10Mil','puntosRonda','puntosRondaFix', 'puntosJugadores',
+  'crearContador', 'incrementarContador', 'contador',
   'decir'
 ];
 
@@ -112,7 +114,7 @@ for (let a of Juego.acciones) {
     if (['puntosRonda','puntosRondaFix'].includes(a)) {
       resultado = `(jugarRonda(${Juego.tamanioFijo=='S' ? 4 : bloque.getFieldValue("K")})||${resultado})`;
     }
-    if (['puntosParaDados','hay10Mil','puntosRonda','puntosRondaFix'].includes(a)) {
+    if (['puntosParaDados','hay10Mil','puntosRonda','puntosRondaFix','puntosJugadores','contador','puntajeRonda'].includes(a)) {
       resultado = [`(iluminar("${bloque.id}")||${resultado})`, 0];
     } else {
       resultado += ";\n";
@@ -120,7 +122,7 @@ for (let a of Juego.acciones) {
     return resultado;
   };
   Juego.tiemposBloque[a] =
-    a === 'puntosRondaFix'
+    ['puntosRondaFix', 'jugarRonda'].includes(a)
     ? (bloque_o_args) => Juego.tiempos[Juego.JUGADA]*4
     : a === 'puntosRonda'
     ? (bloque_o_args) => {
@@ -132,7 +134,7 @@ for (let a of Juego.acciones) {
 }
 
 // Adicionales para los casos especiales
-for (let a of ['jugarRonda', 'inicializarCubilete', 'tirarDado', 'list_assign', 'list_plus_list', 'variables_set']) {
+for (let a of ['inicializarCubilete', 'tirarDado', 'list_assign', 'list_plus_list', 'variables_set']) {
   Juego.acciones.push(a);
   Mila.generador.addReservedWords(a);
 }
@@ -148,7 +150,10 @@ Juego.argsBloque = function(bloque) {
     return Mila.generador.valueToCode(bloque, "X", 0);
   }
   if (['puntosRonda'].includes(bloque.type)) {
-   return bloque.getFieldValue("K");
+    return bloque.getFieldValue("K");
+  }
+  if (['acumularPuntos'].includes(bloque.type)) {
+    return `{a:${Mila.generador.valueToCode(bloque, "A", 0)},b:${Mila.generador.valueToCode(bloque, "B", 0)}}`;
   }
   return '';
 }
@@ -192,6 +197,7 @@ Juego.detener = function() {
   for (robot of Juego.robots) {
     clearInterval(robot.intervalo); // Si había un movimiento programado, lo anulo
   }
+  delete Juego.animacion; // Si había una animación en progreso, la anulo
 };
 
 // Ordena el movimiento de un robot en el mapa
@@ -208,6 +214,15 @@ Juego.mover = function(robot, direccion, args) {
       }
       return undefined;
       break;
+    case 'crearTabla':
+      if (!('tabla' in Juego.elementos)) {
+        Canvas.nuevoObjeto({texto:'Puntajes acumulados:', x:10, y:440});
+        Juego.elementos.tabla = [];
+        for (let i=1; i<=4; i++) {
+          Juego.elementos.tabla.push(Canvas.nuevoObjeto({texto:`J${i}: 0`, x:30, y:440+30*i, v:0}));
+        }
+      }
+      break;
     case 'puntosParaDados':
       if (args === undefined) { return 0; }
       return Juego.puntosParaDados(args);
@@ -221,22 +236,79 @@ Juego.mover = function(robot, direccion, args) {
     case 'puntosRondaFix':
       return Juego.puntosParaRonda();
       break;
+    case 'puntajeRonda':
+      if (!('rondaActual') in Juego) {
+        alert("Todavía no jugaste ninguna ronda");
+        Mila.detener();
+        break;
+      }
+      return Juego.rondaActual.puntos;
+      break;
+    case 'puntosJugadores':
+      if (!('tabla' in Juego.elementos)) {
+        alert("Todavía no creaste la lista de puntajes");
+        Mila.detener();
+        break;
+      }
+      return Juego.elementos.tabla.map((x)=>x.v);
+      break;
+    case 'acumularPuntos':
+      let a = args.a || [];
+      let b = args.b || [];
+      if (a.length != b.length) {
+        alert(`No se pueden acumular las listas ${a} y ${b} porque tienen tamaños distintos`);
+        Mila.detener();
+        break;
+      }
+      for (let i=0; i<Juego.elementos.tabla.length; i++) {
+        Juego.elementos.tabla[i].del = true;
+      }
+      Juego.elementos.tabla = [];
+      for (let i=1; i<=a.length; i++) {
+        let n = a[i-1]+b[i-1];
+        Juego.elementos.tabla.push(Canvas.nuevoObjeto({texto:`J${i}: ${n}`, x:30, y:440+30*i, v:n}));
+      }
+      break;
+    case 'crearContador':
+      if (!('contador' in Juego.elementos)) {
+        Canvas.nuevoObjeto({texto: 'Contador: ', x:10, y:400});
+        Juego.elementos.contador = Canvas.nuevoObjeto({texto:"0", x:120, y:400, v:0})
+      }
+      break;
+    case 'incrementarContador':
+      if (!('contador' in Juego.elementos)) {
+        alert("Todavía no creaste el contador");
+        Mila.detener();
+        break;
+      }
+      Juego.elementos.contador.v = Juego.elementos.contador.v+1;
+      Juego.elementos.contador.texto = `${Juego.elementos.contador.v}`;
+      break;
+    case 'contador':
+      if (!('contador' in Juego.elementos)) {
+        alert("Todavía no creaste el contador");
+        Mila.detener();
+        break;
+      }
+      return Juego.elementos.contador.v;
+      break;
     case 'decir':
       alert(args === undefined ? '?' : args);
       break;
-    // Adicionales para los casos especiales
     case 'jugarRonda':
+      let k = (args === undefined ? 4 : args);
       Juego.rondaActual = {
-        jugadores: args,
+        jugadores: k,
         puntos: []
       };
-      Juego.tiempos[Juego.RONDA] = Juego.tiempos[Juego.JUGADA]*args;
+      Juego.tiempos[Juego.RONDA] = Juego.tiempos[Juego.JUGADA]*k;
       Juego.animacion = {
         k:Juego.RONDA,
         t:0
       };
       return undefined;
       break;
+    // Adicionales para los casos especiales
     case 'inicializarCubilete':
       Juego.inicializarCubilete();
       break;

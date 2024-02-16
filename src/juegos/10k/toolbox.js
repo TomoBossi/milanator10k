@@ -5,24 +5,20 @@ Juego.toolbox =
       <block type="tirarCubilete"></block>\
       <block type="dadosArrojados"></block>\
     </category-->\
+    <category name="Ronda">\
+      <block type="jugarRonda"></block>\
+      <block type="puntajeRonda"></block>\
+    </category>\
     <category name="Puntajes">\
-      <!--block type="puntosParaDados"></block-->\
+      <block type="crearTabla"></block>\
+      <block type="acumularPuntos"></block>\
       <block type="hay10Mil"></block>\
-      <block type="puntosRonda'+
-        (Juego.tamanioFijo=='S'?'Fix"':'"><field name="K">4</field')+
-      '></block>\
+      <block type="puntosJugadores"></block>\
     </category>\
-    <category name="Variables">\
-      <block type="variables_set"></block>\
-      <block type="variables_get"></block>\
-    </category>\
-    <category name="Listas">\
-      <block type="listaVacia"></block>\
-      <block type="listaDeCeros'+
-      (Juego.tamanioFijo=='S'?'Fix"':'"><field name="K">4</field')+
-      '></block>\
-      <block type="list_push_var"></block>\
-      <block type="list_assign_var"></block>\
+    <category name="Contador">\
+      <block type="crearContador"></block>\
+      <block type="incrementarContador"></block>\
+      <block type="contador"></block>\
     </category>\
     <category name="Funciones" custom="PROCEDURE"></category>\
     <category name="Control">\

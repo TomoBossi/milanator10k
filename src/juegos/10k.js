@@ -48,7 +48,7 @@ Juego.tiemposBloque = {
 Juego.acciones = [
   'crearTabla', 'acumularPuntos', 'jugarRonda', 'puntajeRonda',
   'tirarCubilete','dadosArrojados',
-  'puntosParaDados','hay10Mil','puntosRonda','puntosRondaFix', 'puntosJugadores',
+  'puntosParaDados','hay10Mil','noHay10Mil','puntosRonda','puntosRondaFix', 'puntosJugadores',
   'crearContador', 'incrementarContador', 'contador',
   'decir'
 ];
@@ -114,7 +114,7 @@ for (let a of Juego.acciones) {
     if (['puntosRonda','puntosRondaFix'].includes(a)) {
       resultado = `(jugarRonda(${Juego.tamanioFijo=='S' ? 4 : bloque.getFieldValue("K")})||${resultado})`;
     }
-    if (['puntosParaDados','hay10Mil','puntosRonda','puntosRondaFix','puntosJugadores','contador','puntajeRonda'].includes(a)) {
+    if (['puntosParaDados','hay10Mil','noHay10Mil','puntosRonda','puntosRondaFix','puntosJugadores','contador','puntajeRonda'].includes(a)) {
       resultado = [`(iluminar("${bloque.id}")||${resultado})`, 0];
     } else {
       resultado += ";\n";
@@ -230,6 +230,14 @@ Juego.mover = function(robot, direccion, args) {
     case 'hay10Mil':
       return (args || []).some((x) => x >= 10000);
       break;
+    case 'noHay10Mil':
+      if (!('tabla' in Juego.elementos)) {
+        alert("Todavía no creaste la lista de puntajes acumulados");
+        Mila.detener();
+        break;
+      }
+      return !Juego.elementos.tabla.map((x)=>x.v).some((x) => x >= 10000);
+      break;
     case 'puntosRonda':
       return Juego.puntosParaRonda();
       break;
@@ -246,7 +254,7 @@ Juego.mover = function(robot, direccion, args) {
       break;
     case 'puntosJugadores':
       if (!('tabla' in Juego.elementos)) {
-        alert("Todavía no creaste la lista de puntajes");
+        alert("Todavía no creaste la lista de puntajes acumulados");
         Mila.detener();
         break;
       }
@@ -277,7 +285,7 @@ Juego.mover = function(robot, direccion, args) {
       break;
     case 'incrementarContador':
       if (!('contador' in Juego.elementos)) {
-        alert("Todavía no creaste el contador");
+        alert("Todavía no creaste el contador de rondas");
         Mila.detener();
         break;
       }
@@ -286,7 +294,7 @@ Juego.mover = function(robot, direccion, args) {
       break;
     case 'contador':
       if (!('contador' in Juego.elementos)) {
-        alert("Todavía no creaste el contador");
+        alert("Todavía no creaste el contador de rondas");
         Mila.detener();
         break;
       }

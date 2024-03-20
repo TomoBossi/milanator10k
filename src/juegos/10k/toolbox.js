@@ -12,7 +12,7 @@ Juego.toolbox =
     <category name="Puntajes">\
       <block type="crearTabla"></block>\
       <block type="acumularPuntos"></block>\
-      <block type="hay10Mil"></block>\
+      <block type="noHay10Mil"></block>\
       <block type="puntosJugadores"></block>\
     </category>\
     <category name="Contador">\

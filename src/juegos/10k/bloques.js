@@ -36,21 +36,24 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "Jugar ronda",
     "style": "colour_blocks",
     "previousStatement":true,
-    "nextStatement":true
+    "nextStatement":true,
+    "tooltip":"Juega una ronda haciendo que cada jugador tire los dados"
   },{ // Puntaje ronda
     "type": "puntajeRonda",
     "message0": "puntaje de ronda",
     "style": "colour_blocks",
-    "output":"Array"
+    "output":"Array",
+    "tooltip":"Devuelve una lista con la cantidad de puntos que hizo cada jugador en la última ronda jugada"
   },{ // Crear tabla
     "type": "crearTabla",
-    "message0": "Crear lista de puntajes",
+    "message0": "Crear lista de puntajes acumulados",
     "style": "colour_blocks",
     "previousStatement":true,
-    "nextStatement":true
+    "nextStatement":true,
+    "tooltip":"Inicializa con ceros la lista de puntos de cada jugador"
   },{ // Acumular puntos
     "type": "acumularPuntos",
-    "message0": "Acumular puntos con %1 y %2",
+    "message0": "Acumular puntos entre %1 y %2",
     "args0": [{
       "type":"input_value",
       "name":"A",
@@ -62,12 +65,14 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     }],
     "style": "colour_blocks",
     "previousStatement":true,
-    "nextStatement":true
+    "nextStatement":true,
+    "tooltip":"Toma dos listas y suma cada elemento de la segunda lista al elemento de la primera lista en su misma posición. Las listas deben tener la misma longitud"
   },{ // Tabla de puntajes
     "type": "puntosJugadores",
     "message0": "puntajes acumulados",
     "style": "colour_blocks",
-    "output":"Array"
+    "output":"Array",
+    "tooltip":"Devuelve la lista con los puntajes de cada jugador"
   },{ // Puntos para dados
     "type": "puntosParaDados",
     "message0": "puntaje con dados %1",
@@ -89,23 +94,32 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "colour_blocks",
     "output":"Boolean",
     "tooltip":"Toma una lista de números correspondientes a los puntajes de cada jugador y devuelve si alguno ya llegó a 10 mil puntos"
+  },{ // No hay 10 mil
+    "type": "noHay10Mil",
+    "message0": "no hay 10 mil en puntajes acumulados",
+    "style": "colour_blocks",
+    "output":"Boolean",
+    "tooltip":"Devuelve si en la lista de puntajes acumulados no hay ninguno con 10 mil puntos"
   },{ // Crear contador
     "type": "crearContador",
-    "message0": "Crear contador",
+    "message0": "Crear contador de rondas",
     "style": "colour_blocks",
     "previousStatement":true,
-    "nextStatement":true
+    "nextStatement":true,
+    "tooltip":"Inicializa en 0 la cantidad de rondas jugadas"
   },{ // Incrementar contador
     "type": "incrementarContador",
-    "message0": "Incrementar contador",
+    "message0": "Incrementar contador de rondas",
     "style": "colour_blocks",
     "previousStatement":true,
-    "nextStatement":true
+    "nextStatement":true,
+    "tooltip":"Incrementa en uno la cantidad de rondas jugadas"
   },{ // Contador
     "type": "contador",
-    "message0": "contador",
+    "message0": "contador de rondas",
     "style": "colour_blocks",
-    "output":"Number"
+    "output":"Number",
+    "tooltip":"Devuelve la cantidad de rondas jugadas"
   },{ // Puntajes de los jugadores tras realizar una ronda
     "type": "puntosRonda",
     "message0": "puntaje de una ronda de %1 jugadores",
@@ -119,7 +133,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip":"Juega una ronda y devuelve una lista con la cantidad de puntos que hizo cada jugador"
   },{ // Puntajes de los jugadores tras realizar una ronda (con cantidad fija de jugadores)
     "type": "puntosRondaFix",
-    "message0": "puntaje de una ronda",
+    "message0": "puntaje de ronda",
     "style": "colour_blocks",
     "output":"Array",
     "tooltip":"Juega una ronda y devuelve una lista con la cantidad de puntos que hizo cada jugador"
@@ -132,7 +146,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     }],
     "style": "colour_blocks",
     "previousStatement":true,
-    "nextStatement":true
+    "nextStatement":true,
+    "tooltip":"Muestra un mensaje o un dato en un pop-up"
   },{ // Asignar posición lista variable
     "type": "list_assign_var",
     "message0": "Asignar a la posición %1 de %2 el valor %3",

@@ -389,11 +389,19 @@ Juego.puntosParaDados = function(dados) {
   let cantUnos = dados.reduce((rec,x) => rec + (x == 1 ? 1 : 0), 0);
   let cantCincos = dados.reduce((rec,x) => rec + (x == 5 ? 1 : 0), 0);
   let puntos = cantUnos*100 + cantCincos*50;
-  if (cantUnos >= 3) {
+  if (cantUnos == 3) {
     puntos += 1000;
+  } else if (cantUnos == 4) {
+    puntos += 1100;
+  } else if (cantUnos == 5) {
+    puntos += 10000;
   }
-  if (cantCincos >= 3) {
+  if (cantCincos == 3) {
     puntos += 500;
+  } else if (cantCincos == 4) {
+    puntos += 550;
+  } else if (cantCincos == 5) {
+    puntos += 600;
   }
   return puntos;
 };

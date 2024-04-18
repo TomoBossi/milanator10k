@@ -86,7 +86,7 @@ Juego.preCarga = function() {
   for (let i of ['celda','cursor','arbol','arbol-quemado','rayo']) {
     Mila.agregarImagenFuenteLocal(`incendio/${i}.png`, i);
   }
-  Mila.agregarScriptFuente('src/juegos/figus/seedrandom.js');
+  Mila.agregarScriptFuente('src/lib/seedrandom.js');
 };
 
 Juego.layout = {dist:Layout.Horizontal};

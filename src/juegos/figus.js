@@ -82,7 +82,7 @@ Juego.preCarga = function() {
   }
   Mila.agregarImagenFuenteLocal(`figus/vacia.png`, 'vacia');
   Mila.agregarImagenFuenteLocal(`figus/nota.png`, 'nota');
-  Mila.agregarScriptFuente('src/juegos/figus/seedrandom.js');
+  Mila.agregarScriptFuente('src/lib/seedrandom.js');
 };
 
 // Inicializa todo lo necesario una vez que se termina de cargar la página

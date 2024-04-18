@@ -162,7 +162,7 @@ Juego.argsBloque = function(bloque) {
 Juego.preCarga = function() {
   Juego.tamanioFijo = Mila.argumentoURL('fix') || 'S'; // 'N' o 'S'
   Mila.agregarScriptFuente(`src/juegos/10k/bloques.js`);
-  Mila.agregarScriptFuente('src/juegos/figus/seedrandom.js');
+  Mila.agregarScriptFuente('src/lib/seedrandom.js');
   for (let i=1; i<=6; i++) {
     Mila.agregarImagenFuenteLocal(`10k/${i}.png`, `dado${i}`);
   }

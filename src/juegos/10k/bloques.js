@@ -53,7 +53,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip":"Inicializa con ceros la lista de puntos de cada jugador"
   },{ // Acumular puntos
     "type": "acumularPuntos",
-    "message0": "Acumular puntos entre %1 y %2",
+    "message0": "Acumular puntos de %2 en %1",
     "args0": [{
       "type":"input_value",
       "name":"A",
@@ -66,7 +66,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "colour_blocks",
     "previousStatement":true,
     "nextStatement":true,
-    "tooltip":"Toma dos listas y suma cada elemento de la segunda lista al elemento de la primera lista en su misma posición. Las listas deben tener la misma longitud"
+    "tooltip":"Toma los valores de la primera lista, y se los suma a los ya existentes en la segunda lista, posición a posición. Ambas listas deben tener la misma longitud."
   },{ // Tabla de puntajes
     "type": "puntosJugadores",
     "message0": "puntajes acumulados",

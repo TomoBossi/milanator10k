@@ -6,8 +6,11 @@
   - 50 puntos por cada cinco
   - 100 puntos por cada uno
   - 500 puntos adicionales si salen 3 cincos
+  - 50 puntos adicionales si salen 4 cincos
+  - 50 puntos adicionales si salen 4 cincos
   - 1000 puntos adicionales si salen 3 unos
-  - 10000 puntos adicionales si salen 5 unos
+  - 100 puntos adicionales si salen 4 unos
+  - 8900 puntos adicionales si salen 5 unos
 
   VARIABLES
 
@@ -422,7 +425,7 @@ Juego.roles = function() {
 
 Juego.tiempos = {
   [Juego.CUBILETE]:25,
-  [Juego.DADO]:9,
+  [Juego.DADO]:15,
   [Juego.DELAY]:20
 };
 
@@ -464,14 +467,17 @@ Juego.paso = function() {
       case Juego.DADO:
         if (tLocal == 0) {
           Juego.tirarDado();
-        } else if (tLocal % 3 == 0) {
+        } else if (tLocal == Juego.tiempos[Juego.DADO]-1) {
           Juego.elementos.dados[Juego.elementos.dados.length-1].imagen =
-            `dado${tLocal == Juego.tiempos[Juego.DADO]-1
-              ? Juego.elementos.dados[Juego.elementos.dados.length-1].val
-              : 1+Math.floor(Math.random()*6)
-            }`
+            `dado${Juego.elementos.dados[Juego.elementos.dados.length-1].val}`
           ;
-          Juego.elementos.dados[Juego.elementos.dados.length-1].rot -= 15;
+        } else {
+          /*if (tLocal % 7 == 0) {
+            Juego.elementos.dados[Juego.elementos.dados.length-1].imagen =
+              `dado${1+Math.floor(Math.random()*6)}`
+            ;
+          }*/
+          Juego.elementos.dados[Juego.elementos.dados.length-1].rot -= 10 / (tLocal/2.0 + 1);//Math.max(0,14-14*Math.pow(1.0*tLocal/Juego.tiempos[Juego.DADO],5));
         }
         break;
       case Juego.DELAY:

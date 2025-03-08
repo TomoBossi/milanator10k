@@ -246,6 +246,16 @@ Mila.pedirPerfil = function() {
   }
 };
 
+Mila.info = function() {
+  const modal = document.getElementById('modal');
+  if (modal.style.display == 'block') {
+    modal.style.display = 'none';
+  } else {
+    modal.innerHTML = "Desarrollado por <a href='https://gpfernandezflorio.github.io/' target='_blank'>Gonzalo Pablo Fernández</a> <a class='btn-flat waves-effect waves-light z-depth-1-half' onclick='Mila.info();'>X</a>";
+    modal.style.display = 'block';
+  }
+};
+
 // Antes de terminar de cargar la página, llamo a esta función
 Mila.preCarga();
 

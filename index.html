@@ -28,7 +28,7 @@
 
   <!-- Hoja de estilos -->
   <link rel="stylesheet" href="src/materialize/materialize.css" media="screen,projection">
-  <script src="src/materialize/materialize.js"></script>
+  <script src="src/materialize/materialize.min.js"></script>
   <link rel="stylesheet" href="src/mila.css" media="screen,projection">
 </head>
 
@@ -47,6 +47,7 @@
     <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonNuevo" onclick="Mila.Blockly.nuevo(Mila.workspace);">Nuevo</a>
     <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonGuardar" onclick="Mila.Blockly.exportar(Mila.workspace, prompt('Nombre:'));">Guardar</a>
     <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonCargar" onclick="Mila.Blockly.importar(Mila.workspace);">Cargar</a>
+    <a class="btn-flat waves-effect waves-light z-depth-1-half" id="botonInfo" onclick="Mila.info();">?</a>
   </div>
 
   <div id="hResize"></div>
@@ -57,6 +58,7 @@
   <div id="blockly"></div>
   <!-- Canvas -->
   <canvas id="canvas"></canvas>
+  <div id="modal"></div>
 </body>
 
 </html>

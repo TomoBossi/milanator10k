@@ -85,3 +85,21 @@ body {
   100% {background-color: #588; color: #fff; font-size: 14px;
         border: solid 1px #559; padding: 0 .5rem; margin: 0 0;}
 }
+
+#modal {
+  display: none;
+  position: absolute;
+  right: 40px;
+  top: 10px;
+  background-color: #fff;
+  border-style: solid;
+  border-color: #000;
+  border-radius: 15px;
+  padding: 10px 20px;
+  z-index: 2;
+}
+
+#modal a {
+  height: 20px;
+  line-height: 1.4;
+}

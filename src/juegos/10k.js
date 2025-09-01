@@ -224,6 +224,11 @@ Juego.mover = function(robot, direccion, args) {
         for (let i=1; i<=4; i++) {
           Juego.elementos.tabla.push(Canvas.nuevoObjeto({texto:`J${i}: 0`, x:30, y:440+30*i, v:0}));
         }
+      } else {
+        for (let i=1; i<=4; i++) {
+          Juego.elementos.tabla[i-1].texto = `J${i+1}: 0`;
+          Juego.elementos.tabla[i-1].v = 0;
+        }
       }
       break;
     case 'puntosParaDados':
@@ -307,6 +312,11 @@ Juego.mover = function(robot, direccion, args) {
       alert(args === undefined ? '?' : args);
       break;
     case 'jugarRonda':
+      if (!('tabla' in Juego.elementos)) {
+        alert("Todavía no creaste la lista de puntajes acumulados");
+        Mila.detener();
+        break;
+      }
       let k = (args === undefined ? 4 : args);
       Juego.rondaActual = {
         jugadores: k,
@@ -371,6 +381,18 @@ Juego.tirarCubilete = function() {
   let resultado = 'inicializarCubilete();\nvar_dados = [];\n';
   resultado += 'for (var i=0; i<5; i++) {\n  var_dados.push(tirarDado());\n}\n';
   return resultado;
+};
+
+Juego.resolverJugada = function(puntosJugada) {
+  const ronda = Juego.rondaActual;
+  if (!ronda || !Juego.elementos.tabla) return;
+
+  ronda.puntos.push(puntosJugada.texto);
+  
+  const pl = ronda.puntos.length;
+  const obj = Juego.elementos.tabla[pl-1];
+  obj.v += puntosJugada.val;
+  obj.texto = `J${pl}: ${obj.v}`;
 };
 
 Juego.puntosParaRonda = function() {
@@ -444,9 +466,6 @@ Juego.paso = function() {
         ? Juego.DADO
         : Juego.DELAY
       ;
-      if (tLocal == Juego.tiempos[Juego.JUGADA] -1) { // Terminó una jugada
-        Juego.rondaActual.puntos.push(Juego.elementos.puntosJugada.texto);
-      }
       if (animacion == Juego.DADO) {
         tLocal = (tLocal-Juego.tiempos[Juego.CUBILETE]) % Juego.tiempos[Juego.DADO];
       } else if (animacion == Juego.DELAY) {
@@ -487,6 +506,15 @@ Juego.paso = function() {
             {texto:puntos, x:100, y:100, val:puntos}
           );
         } else if (tLocal == Juego.tiempos[Juego.DELAY]-1) {
+          const ronda = Juego.rondaActual;
+
+          ronda.puntos.push(Juego.elementos.puntosJugada.texto);
+          
+          const pl = ronda.puntos.length;
+          const obj = Juego.elementos.tabla[pl-1];
+          obj.v += Juego.elementos.puntosJugada.val;
+          obj.texto = `J${pl}: ${obj.v}`;
+
           Juego.elementos.puntosJugada.del = true;
         } else {
           Juego.elementos.puntosJugada.y -= 1;

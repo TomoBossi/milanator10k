@@ -33,17 +33,17 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output":"Array"
   },{ // Jugar ronda
     "type": "jugarRonda",
-    "message0": "Jugar ronda",
+    "message0": "Jugar ronda y acumular puntos",
     "style": "colour_blocks",
     "previousStatement":true,
     "nextStatement":true,
-    "tooltip":"Juega una ronda haciendo que cada jugador tire los dados"
-  },{ // Puntaje ronda
-    "type": "puntajeRonda",
-    "message0": "puntaje de ronda",
-    "style": "colour_blocks",
-    "output":"Array",
-    "tooltip":"Devuelve una lista con la cantidad de puntos que hizo cada jugador en la última ronda jugada"
+    "tooltip":"Juega una ronda haciendo que cada jugador tire los dados, y simultaneamente acumula los puntos de la ronda"
+  // },{ // Puntaje ronda
+    // "type": "puntajeRonda",
+    // "message0": "puntaje de ronda",
+    // "style": "colour_blocks",
+    // "output":"Array",
+    // "tooltip":"Devuelve una lista con la cantidad de puntos que hizo cada jugador en la última ronda jugada"
   },{ // Crear tabla
     "type": "crearTabla",
     "message0": "Crear lista de puntajes acumulados",
@@ -51,22 +51,22 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "previousStatement":true,
     "nextStatement":true,
     "tooltip":"Inicializa con ceros la lista de puntos de cada jugador"
-  },{ // Acumular puntos
-    "type": "acumularPuntos",
-    "message0": "Acumular puntos de %2 en %1",
-    "args0": [{
-      "type":"input_value",
-      "name":"A",
-      "check":"Array"
-    },{
-      "type":"input_value",
-      "name":"B",
-      "check":"Array"
-    }],
-    "style": "colour_blocks",
-    "previousStatement":true,
-    "nextStatement":true,
-    "tooltip":"Toma los valores de la primera lista, y se los suma a los ya existentes en la segunda lista, posición a posición. Ambas listas deben tener la misma longitud."
+  // },{ // Acumular puntos
+    // "type": "acumularPuntos",
+    // "message0": "Acumular puntos de %2 en %1",
+    // "args0": [{
+      // "type":"input_value",
+      // "name":"A",
+      // "check":"Array"
+    // },{
+      // "type":"input_value",
+      // "name":"B",
+      // "check":"Array"
+    // }],
+    // "style": "colour_blocks",
+    // "previousStatement":true,
+    // "nextStatement":true,
+    // "tooltip":"Toma los valores de la primera lista, y se los suma a los ya existentes en la segunda lista, posición a posición. Ambas listas deben tener la misma longitud."
   },{ // Tabla de puntajes
     "type": "puntosJugadores",
     "message0": "puntajes acumulados",
@@ -180,20 +180,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "colour_blocks",
     "previousStatement":true,
     "nextStatement":true
-  },{ // Suma de listas
-    "type": "list_plus_list",
-    "message0": "Suma de listas %1 y %2",
-    "args0": [{
-      "type":"input_value",
-      "name":"A",
-      "check":"Array"
-    },{
-      "type":"input_value",
-      "name":"B",
-      "check":"Array"
-    }],
-    "style": "colour_blocks",
-    "output":"Array"
+  // },{ // Suma de listas
+    // "type": "list_plus_list",
+    // "message0": "Suma de listas %1 y %2",
+    // "args0": [{
+      // "type":"input_value",
+      // "name":"A",
+      // "check":"Array"
+    // },{
+      // "type":"input_value",
+      // "name":"B",
+      // "check":"Array"
+    // }],
+    // "style": "colour_blocks",
+    // "output":"Array"
   },{ // Lista vacía
     "type": "listaVacia",
     "message0": "lista vacía",

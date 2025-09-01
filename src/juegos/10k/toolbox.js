@@ -7,11 +7,11 @@ Juego.toolbox =
     </category-->\
     <category name="Ronda">\
       <block type="jugarRonda"></block>\
-      <block type="puntajeRonda"></block>\
+      <!-- <block type="puntajeRonda"></block> -->\
     </category>\
     <category name="Puntajes">\
       <block type="crearTabla"></block>\
-      <block type="acumularPuntos"></block>\
+      <!-- <block type="acumularPuntos"></block> -->\
       <block type="noHay10Mil"></block>\
       <block type="puntosJugadores"></block>\
     </category>\
@@ -35,7 +35,7 @@ Juego.toolbox =
     <block type="logic_compare_10k"></block>\
     <block type="logic_negate"></block>\
     <block type="math_on_list_10k"></block>\
-    <block type="list_plus_list"></block>\
+    <!-- <block type="list_plus_list"></block> -->\
     <block type="count"></block>\
     <block type="decir"></block>\
     </category>\
